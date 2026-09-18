@@ -1,8 +1,9 @@
+import { useState, useEffect } from 'react'
 import { Radio } from 'lucide-react'
 
 /**
  * TenderTicker — scrolling marquee with live-style tender activity updates.
- * Purely illustrative / marketing copy. Not real-time data.
+ * Automatically slides up and hides once the user scrolls down past the hero section.
  */
 
 const updates = [
@@ -19,11 +20,27 @@ const updates = [
 ]
 
 export default function TenderTicker() {
+  const [visible, setVisible] = useState(true)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Hide smoothly as soon as user scrolls down from top / hero section
+      setVisible(window.scrollY < 180)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
     <aside
       role="region"
       aria-label="Tender Activity Marquee"
-      className="w-full overflow-hidden border-b transition-colors"
+      className={`w-full overflow-hidden transition-all duration-300 ease-in-out ${
+        visible
+          ? 'max-h-12 opacity-100 translate-y-0 border-b'
+          : 'max-h-0 opacity-0 -translate-y-full pointer-events-none border-b-0'
+      }`}
       style={{
         background: 'var(--bg-subtle)',
         borderColor: 'var(--border)',
@@ -82,7 +99,7 @@ export default function TenderTicker() {
               </span>
             ))}
 
-            {/* Duplicated list for seamless CSS loop — marked aria-hidden for screen readers */}
+            {/* Duplicated list for seamless loop */}
             {updates.map((item, i) => (
               <span key={`d-${i}`} aria-hidden="true" className="flex items-center gap-2 pr-6 whitespace-nowrap select-none">
                 <span

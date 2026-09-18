@@ -1,135 +1,377 @@
+import { useState, useEffect } from 'react'
+import {
+  KeyRound, Search, CheckCircle, FileSpreadsheet,
+  UploadCloud, Trophy, ArrowRight, ShieldCheck, Zap
+} from 'lucide-react'
 import SectionReveal from '@/components/ui/SectionReveal'
 
-const stages = [
+interface Stage {
+  id: string
+  step: string
+  label: string
+  title: string
+  desc: string
+  deliverable: string
+  sla: string
+  color: string
+  icon: typeof KeyRound
+}
+
+const stages: Stage[] = [
   {
     id: 'onboard',
+    step: '01',
     label: 'ONBOARD',
-    desc: 'Portal registration & DSC set up',
+    title: 'Portal Enrollment & DSC',
+    desc: 'Class 3 DSC token configuration, primary GeM seller authorization, and multi-portal credentials setup.',
+    deliverable: 'Verified Portal Profiles & Cryptographic Setup',
+    sla: 'Day 1 — 24h Setup',
     color: '#0D9488',
+    icon: KeyRound,
   },
   {
     id: 'discover',
+    step: '02',
     label: 'DISCOVER',
-    desc: 'Matching tenders identified',
-    color: '#0891B2',
+    title: 'Opportunity Intelligence',
+    desc: 'Automated scraping and manual scrutiny across GeM, CPPP & state portals matching your exact eligibility.',
+    deliverable: 'Daily Filtered Bid Tracker & MSME Exemption Alerts',
+    sla: 'Real-time Daily Scans',
+    color: '#0284C7',
+    icon: Search,
   },
   {
     id: 'assess',
+    step: '03',
     label: 'ASSESS',
-    desc: 'Eligibility & criteria checked',
-    color: '#8B5CF6',
+    title: 'Eligibility & Feasibility',
+    desc: 'Deep audit of turnover limits, prior experience criteria, BOQ scope, and joint-venture clauses.',
+    deliverable: 'Formal Go / No-Go Risk Assessment Matrix',
+    sla: 'Within 12h of Notice',
+    color: '#6366F1',
+    icon: ShieldCheck,
   },
   {
     id: 'prepare',
+    step: '04',
     label: 'PREPARE',
-    desc: 'Documents & bid drafted',
+    title: 'Bid Engineering & BOQ',
+    desc: 'Drafting clause-by-clause compliance, technical annexures, EMD / Bank Guarantee draft, and price sheet.',
+    deliverable: 'Flawless Pre-Submission Technical Binder',
+    sla: 'Dual-Expert Peer Review',
     color: '#EC4899',
+    icon: FileSpreadsheet,
   },
   {
     id: 'submit',
+    step: '05',
     label: 'SUBMIT',
-    desc: 'Bid submitted before deadline',
+    title: 'Digital Cryptographic Filing',
+    desc: 'Final document encryption, DSC digital signing, and upload verification well ahead of the deadline.',
+    deliverable: 'Official Portal Acknowledgement & Timestamp Slip',
+    sla: '6h Before Portal Cutoff',
     color: '#F59E0B',
+    icon: UploadCloud,
   },
   {
     id: 'track',
+    step: '06',
     label: 'TRACK',
-    desc: 'Status monitored to award',
+    title: 'Opening & Award Defense',
+    desc: 'Monitoring technical bid opening, counter-representations for queries, and reverse auction bidding support.',
+    deliverable: 'Award Tracking & Commercial Scrutiny Report',
+    sla: 'Until Final Allocation',
     color: '#10B981',
+    icon: Trophy,
   },
 ]
 
 export default function TenderWorkflow() {
+  const [activeStage, setActiveStage] = useState(0)
+
+  // Subtle cyclic highlight simulating left-to-right workflow progress
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveStage((prev) => (prev + 1) % stages.length)
+    }, 4200)
+    return () => clearInterval(timer)
+  }, [])
+
   return (
-    <section className="section-padding overflow-hidden" style={{ background: 'var(--bg-subtle)' }}>
-      <div className="container-main">
+    <section
+      className="section-padding relative overflow-hidden"
+      style={{ background: 'var(--bg-subtle)' }}
+    >
+      {/* ── Subtle Background: Circuit / Fiber Grid ── */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at 50% 50%, var(--accent) 1px, transparent 1px),
+            linear-gradient(to right, var(--text-primary) 0.5px, transparent 0.5px),
+            linear-gradient(to bottom, var(--text-primary) 0.5px, transparent 0.5px)
+          `,
+          backgroundSize: '48px 48px, 48px 48px, 48px 48px',
+        }}
+      />
+
+      <div className="container-main relative z-10">
         <SectionReveal>
-          <div className="text-center mb-12">
-            <div className="tag tag-accent mb-4 mx-auto w-fit">Standardized Workflow</div>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 tracking-tight" style={{ color: 'var(--text-primary)' }}>
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider mb-4 shadow-xs"
+              style={{
+                backgroundColor: 'var(--bg-card)',
+                borderColor: 'var(--border-md)',
+                color: 'var(--accent)',
+              }}
+            >
+              <Zap size={13} className="animate-pulse" style={{ color: 'var(--accent)' }} />
+              Dynamic Execution Pipeline
+            </div>
+            <h2
+              className="text-3xl sm:text-4xl lg:text-[2.6rem] font-extrabold tracking-tight mb-4"
+              style={{ color: 'var(--text-primary)' }}
+            >
               The tender journey — end to end
             </h2>
-            <p className="max-w-xl mx-auto text-base" style={{ color: 'var(--text-secondary)' }}>
-              Every bid we manage moves through this disciplined six-stage pipeline with full status visibility.
+            <p className="text-sm sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              Every tender follows our continuous, zero-defect left-to-right verification pipeline to guarantee 100% compliance before digital sealing.
             </p>
           </div>
         </SectionReveal>
 
-        {/* Desktop: horizontal flow */}
-        <div className="hidden lg:flex items-start gap-0">
-          {stages.map((stage, i) => (
-            <div key={stage.id} className="flex items-center flex-1">
-              <div className="flex-1 flex flex-col items-center">
-                {/* Stage box */}
-                <div
-                  className="w-full max-w-[140px] rounded-2xl p-4 border text-center transition-all duration-200 hover:-translate-y-1 cursor-default shadow-sm"
-                  style={{
-                    borderColor: `${stage.color}35`,
-                    backgroundColor: 'var(--bg-card)',
-                  }}
-                >
-                  <div
-                    className="text-[11px] font-extrabold tracking-widest mb-2"
-                    style={{ color: stage.color }}
-                  >
-                    {stage.label}
-                  </div>
-                  <div className="w-8 h-1 rounded-full mx-auto mb-2.5" style={{ backgroundColor: stage.color }} />
-                  <p className="text-xs leading-snug font-medium" style={{ color: 'var(--text-muted)' }}>
-                    {stage.desc}
-                  </p>
-                </div>
-              </div>
-
-              {/* Arrow connector */}
-              {i < stages.length - 1 && (
-                <div className="flex items-center flex-shrink-0 -mx-1 opacity-60">
-                  <div className="w-5 h-0.5" style={{ background: 'var(--border-md)' }} />
-                  <div
-                    className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[6px]"
-                    style={{ borderLeftColor: 'var(--border-md)' }}
-                  />
-                </div>
-              )}
+        {/* ── DESKTOP: Dynamic Left-to-Right Animated Pipeline ── */}
+        <div className="hidden lg:block relative mb-12">
+          {/* Continuous Glowing Flow Track running from Left to Right behind the cards */}
+          <div className="absolute top-[42px] left-8 right-8 z-0 pointer-events-none">
+            <div className="flow-track h-[3px]">
+              {/* Dynamic traveling laser beam flowing left to right */}
+              <div className="flow-beam" />
             </div>
-          ))}
-        </div>
+          </div>
 
-        {/* Mobile: vertical flow */}
-        <div className="lg:hidden flex flex-col gap-0 max-w-sm mx-auto">
-          {stages.map((stage, i) => (
-            <div key={stage.id} className="flex gap-4">
-              {/* Left: line */}
-              <div className="flex flex-col items-center">
+          {/* 6 Stage Stations */}
+          <div className="grid grid-cols-6 gap-4 relative z-10">
+            {stages.map((stage, idx) => {
+              const Icon = stage.icon
+              const isCurrent = activeStage === idx
+
+              return (
                 <div
-                  className="w-3 h-3 rounded-full flex-shrink-0 mt-1"
-                  style={{ backgroundColor: stage.color }}
-                />
-                {i < stages.length - 1 && (
-                  <div className="w-0.5 flex-1 my-1" style={{ background: 'var(--border)' }} />
-                )}
-              </div>
+                  key={stage.id}
+                  onClick={() => setActiveStage(idx)}
+                  onMouseEnter={() => setActiveStage(idx)}
+                  className={`cursor-pointer transition-all duration-300 flex flex-col group ${
+                    isCurrent ? '-translate-y-2' : 'hover:-translate-y-1'
+                  }`}
+                >
+                  {/* Station Node / Number Bubble */}
+                  <div className="flex items-center justify-center mb-6">
+                    <div
+                      className={`relative w-11 h-11 rounded-2xl flex items-center justify-center border transition-all duration-300 shadow-md ${
+                        isCurrent ? 'scale-110 shadow-lg' : 'group-hover:scale-105'
+                      }`}
+                      style={{
+                        backgroundColor: isCurrent ? stage.color : 'var(--bg-card)',
+                        borderColor: isCurrent ? stage.color : 'var(--border-md)',
+                        boxShadow: isCurrent ? `0 0 20px ${stage.color}60` : undefined,
+                      }}
+                    >
+                      <Icon
+                        size={20}
+                        className="transition-colors duration-200"
+                        style={{ color: isCurrent ? '#FFFFFF' : stage.color }}
+                      />
 
-              {/* Right: card */}
-              <div
-                className="flex-1 rounded-xl p-3.5 border mb-3 shadow-sm"
+                      {/* Small number pill on top */}
+                      <span
+                        className="absolute -top-2.5 -right-2 px-1.5 py-0.2 rounded-full text-[9px] font-extrabold border shadow-xs"
+                        style={{
+                          backgroundColor: 'var(--bg-base)',
+                          color: stage.color,
+                          borderColor: `${stage.color}50`,
+                        }}
+                      >
+                        {stage.step}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Stage Card */}
+                  <div
+                    className={`flex-1 rounded-2xl p-4 border flex flex-col justify-between transition-all duration-300 relative overflow-hidden backdrop-blur-sm shadow-xs ${
+                      isCurrent ? 'shadow-xl' : 'hover:shadow-md'
+                    }`}
+                    style={{
+                      backgroundColor: 'var(--bg-card)',
+                      borderColor: isCurrent ? stage.color : 'var(--border)',
+                      boxShadow: isCurrent ? `0 8px 30px ${stage.color}20` : undefined,
+                    }}
+                  >
+                    {/* Glowing indicator line on top of active card */}
+                    <div
+                      className="absolute top-0 left-0 right-0 h-[3px] transition-opacity duration-300"
+                      style={{
+                        backgroundColor: stage.color,
+                        opacity: isCurrent ? 1 : 0.2,
+                      }}
+                    />
+
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span
+                          className="text-[10px] font-black uppercase tracking-wider"
+                          style={{ color: stage.color }}
+                        >
+                          {stage.label}
+                        </span>
+                        <span
+                          className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border"
+                          style={{
+                            backgroundColor: `${stage.color}12`,
+                            borderColor: `${stage.color}30`,
+                            color: stage.color,
+                          }}
+                        >
+                          Step {stage.step}
+                        </span>
+                      </div>
+
+                      <h4
+                        className="text-xs font-extrabold leading-snug mb-1.5 transition-colors"
+                        style={{ color: isCurrent ? 'var(--text-primary)' : 'var(--text-primary)' }}
+                      >
+                        {stage.title}
+                      </h4>
+
+                      <p className="text-[11px] leading-relaxed mb-3" style={{ color: 'var(--text-secondary)' }}>
+                        {stage.desc}
+                      </p>
+                    </div>
+
+                    <div className="pt-2 border-t mt-auto" style={{ borderColor: 'var(--border)' }}>
+                      <div className="text-[9px] font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>
+                        Key Deliverable:
+                      </div>
+                      <p className="text-[10px] font-medium leading-tight line-clamp-2" style={{ color: 'var(--text-primary)' }}>
+                        {stage.deliverable}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Active Stage Detailed Spotlight Bar */}
+          <div
+            className="mt-6 rounded-2xl p-4 border flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm"
+            style={{
+              backgroundColor: 'var(--bg-card)',
+              borderColor: `${stages[activeStage].color}40`,
+            }}
+          >
+            <div className="flex items-center gap-3">
+              <span
+                className="px-2.5 py-1 rounded-lg text-xs font-black uppercase tracking-wider text-white flex-shrink-0"
+                style={{ backgroundColor: stages[activeStage].color }}
+              >
+                Stage {stages[activeStage].step} in Focus
+              </span>
+              <div>
+                <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
+                  {stages[activeStage].title}
+                </span>
+                <span className="text-xs ml-2 hidden sm:inline" style={{ color: 'var(--text-secondary)' }}>
+                  — {stages[activeStage].deliverable}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <span
+                className="text-xs font-semibold px-2.5 py-1 rounded-full border"
                 style={{
-                  borderColor: `${stage.color}35`,
-                  backgroundColor: 'var(--bg-card)',
+                  backgroundColor: `${stages[activeStage].color}12`,
+                  borderColor: `${stages[activeStage].color}30`,
+                  color: stages[activeStage].color,
                 }}
               >
-                <div
-                  className="text-xs font-bold tracking-wider mb-1"
-                  style={{ color: stage.color }}
-                >
-                  {stage.label}
-                </div>
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                  {stage.desc}
-                </p>
+                SLA: {stages[activeStage].sla}
+              </span>
+              <div className="flex items-center gap-1 text-xs font-bold" style={{ color: stages[activeStage].color }}>
+                <span>Next</span>
+                <ArrowRight size={13} />
               </div>
             </div>
-          ))}
+          </div>
+        </div>
+
+        {/* ── MOBILE / TABLET: Vertical Flow with Dynamic Connecting Light ── */}
+        <div className="lg:hidden flex flex-col gap-4 max-w-lg mx-auto">
+          {stages.map((stage, idx) => {
+            const Icon = stage.icon
+            const isCurrent = activeStage === idx
+
+            return (
+              <div
+                key={stage.id}
+                onClick={() => setActiveStage(idx)}
+                className="flex gap-4 items-start"
+              >
+                {/* Vertical timeline node */}
+                <div className="flex flex-col items-center flex-shrink-0">
+                  <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center border shadow-xs transition-all"
+                    style={{
+                      backgroundColor: isCurrent ? stage.color : 'var(--bg-card)',
+                      borderColor: stage.color,
+                    }}
+                  >
+                    <Icon size={16} style={{ color: isCurrent ? '#FFFFFF' : stage.color }} />
+                  </div>
+                  {idx < stages.length - 1 && (
+                    <div
+                      className="w-[2px] h-14 my-1"
+                      style={{
+                        background: isCurrent
+                          ? `linear-gradient(to bottom, ${stage.color}, var(--border))`
+                          : 'var(--border)',
+                      }}
+                    />
+                  )}
+                </div>
+
+                {/* Card */}
+                <div
+                  className="flex-1 rounded-2xl p-4 border shadow-xs transition-all mb-2"
+                  style={{
+                    backgroundColor: 'var(--bg-card)',
+                    borderColor: isCurrent ? stage.color : 'var(--border)',
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: stage.color }}>
+                      Step {stage.step} · {stage.label}
+                    </span>
+                    <span className="text-[10px] font-semibold" style={{ color: 'var(--text-muted)' }}>
+                      {stage.sla}
+                    </span>
+                  </div>
+                  <h4 className="text-sm font-bold mb-1" style={{ color: 'var(--text-primary)' }}>
+                    {stage.title}
+                  </h4>
+                  <p className="text-xs leading-relaxed mb-2.5" style={{ color: 'var(--text-secondary)' }}>
+                    {stage.desc}
+                  </p>
+                  <div className="flex items-center gap-1.5 text-[11px] font-medium" style={{ color: stage.color }}>
+                    <CheckCircle size={12} />
+                    <span>{stage.deliverable}</span>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </div>
     </section>

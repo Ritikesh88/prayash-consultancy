@@ -42,8 +42,19 @@ const differentiators = [
 
 export default function WhyUs() {
   return (
-    <section className="section-padding" style={{ background: 'var(--bg-subtle)' }}>
-      <div className="container-main">
+    <section className="section-padding relative overflow-hidden" style={{ background: 'var(--bg-subtle)' }}>
+      {/* Subtle diamond trellis pattern */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.025]"
+        style={{
+          backgroundImage: `
+            linear-gradient(45deg, var(--text-primary) 1px, transparent 1px),
+            linear-gradient(-45deg, var(--text-primary) 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px',
+        }}
+      />
+      <div className="container-main relative z-10">
         <SectionReveal>
           <div className="text-center mb-14 max-w-2xl mx-auto">
             <div className="tag tag-accent mb-4 mx-auto w-fit">The Desk Advantage</div>

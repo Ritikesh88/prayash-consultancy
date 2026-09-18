@@ -190,10 +190,18 @@ const row2Doubled = [...row2, ...row2]
 export default function LogoMarquee() {
   return (
     <section
-      className="py-16 overflow-hidden border-y"
+      className="py-16 overflow-hidden border-y relative"
       style={{ background: 'var(--bg-subtle)', borderColor: 'var(--border)' }}
     >
-      <div className="container-main mb-10 text-center">
+      {/* Subtle blueprint scanline pattern */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.02]"
+        style={{
+          backgroundImage: 'linear-gradient(to bottom, var(--text-primary) 1px, transparent 1px)',
+          backgroundSize: '100% 28px',
+        }}
+      />
+      <div className="container-main mb-10 text-center relative z-10">
         <div className="tag tag-accent mb-3 mx-auto w-fit">
           Government Opportunities
         </div>

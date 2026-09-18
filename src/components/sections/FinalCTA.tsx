@@ -24,7 +24,7 @@ export default function FinalCTA() {
               />
             </div>
 
-            {/* Glow orbs */}
+            {/* Glow orbs & subtle Indian enterprise boardroom watermark */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
               <div
                 className="absolute -top-10 right-0 w-64 h-64 rounded-full"
@@ -33,6 +33,15 @@ export default function FinalCTA() {
               <div
                 className="absolute -bottom-10 left-0 w-48 h-48 rounded-full"
                 style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%)' }}
+              />
+              {/* Barely visible Indian corporate team watermark */}
+              <div
+                className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-[0.03] mix-blend-luminosity filter contrast-125"
+                style={{
+                  backgroundImage: 'url(/indian-professionals.png)',
+                  maskImage: 'radial-gradient(ellipse at center, black 25%, transparent 80%)',
+                  WebkitMaskImage: 'radial-gradient(ellipse at center, black 25%, transparent 80%)',
+                }}
               />
             </div>
 

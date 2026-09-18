@@ -27,8 +27,15 @@ const comparisonData = [
 
 export default function ProblemSection() {
   return (
-    <section className="section-padding" style={{ background: 'var(--bg-base)' }}>
-      <div className="container-main">
+    <section className="section-padding relative overflow-hidden" style={{ background: 'var(--bg-base)' }}>
+      {/* Subtle cautionary diagonal grid pattern */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.02]"
+        style={{
+          backgroundImage: 'repeating-linear-gradient(45deg, var(--text-primary), var(--text-primary) 1px, transparent 1px, transparent 24px)',
+        }}
+      />
+      <div className="container-main relative z-10">
         {/* Section Header */}
         <SectionReveal>
           <div className="text-center max-w-3xl mx-auto mb-14">

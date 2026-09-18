@@ -48,8 +48,16 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section className="section-padding" style={{ background: 'var(--bg-subtle)' }}>
-      <div className="container-main">
+    <section className="section-padding relative overflow-hidden" style={{ background: 'var(--bg-subtle)' }}>
+      {/* Subtle concentric radar pattern */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.025]"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 50% 50%, var(--accent) 1px, transparent 1px), radial-gradient(circle at 50% 50%, transparent 40px, var(--accent) 41px, transparent 42px)',
+          backgroundSize: '120px 120px',
+        }}
+      />
+      <div className="container-main relative z-10">
         <SectionReveal>
           <div className="text-center mb-12">
             <div className="tag tag-accent mb-4 mx-auto w-fit">Process</div>

@@ -32,8 +32,25 @@ export default function BidReadiness() {
   const progress = Math.round((checked.size / checklistItems.length) * 100)
 
   return (
-    <section className="section-padding" style={{ background: 'var(--bg-subtle)' }}>
-      <div className="container-main">
+    <section className="section-padding relative overflow-hidden" style={{ background: 'var(--bg-subtle)' }}>
+      {/* Subtle calibration gauge circles */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.02]"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 20% 50%, var(--accent) 1px, transparent 1px), radial-gradient(circle at 80% 50%, var(--accent) 1px, transparent 1px)',
+          backgroundSize: '36px 36px',
+        }}
+      />
+      {/* Barely visible Indian enterprise professional team watermark */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-full lg:w-1/2 pointer-events-none opacity-[0.03] bg-contain bg-no-repeat bg-left-center mix-blend-luminosity filter contrast-125"
+        style={{
+          backgroundImage: 'url(/indian-professionals.png)',
+          maskImage: 'radial-gradient(circle at 25% 50%, black 30%, transparent 75%)',
+          WebkitMaskImage: 'radial-gradient(circle at 25% 50%, black 30%, transparent 75%)',
+        }}
+      />
+      <div className="container-main relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left copy */}
           <SectionReveal>

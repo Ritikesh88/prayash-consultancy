@@ -15,8 +15,20 @@ const iconMap: Record<string, React.ComponentType<{ size: number; className?: st
 
 export default function ServiceGrid() {
   return (
-    <section className="section-padding" style={{ background: 'var(--bg-base)' }}>
-      <div className="container-main">
+    <section className="section-padding relative overflow-hidden" style={{ background: 'var(--bg-base)' }}>
+      {/* Subtle blueprint crosshatch pattern */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.025]"
+        style={{
+          backgroundImage: `
+            radial-gradient(var(--text-primary) 1px, transparent 1px),
+            linear-gradient(to right, var(--text-primary) 0.5px, transparent 0.5px),
+            linear-gradient(to bottom, var(--text-primary) 0.5px, transparent 0.5px)
+          `,
+          backgroundSize: '36px 36px, 36px 36px, 36px 36px',
+        }}
+      />
+      <div className="container-main relative z-10">
         <SectionReveal>
           <div className="text-center mb-12">
             <div className="tag tag-accent mb-4 mx-auto w-fit">Core Services</div>

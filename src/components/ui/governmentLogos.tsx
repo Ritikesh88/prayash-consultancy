@@ -228,3 +228,91 @@ export function MofLogo({ size = 32, className = '' }: LogoProps) {
     </svg>
   )
 }
+
+// 15. CPPP — Central Public Procurement Portal (eprocure.gov.in)
+export function CpppLogo({ size = 32, className = '' }: LogoProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <rect width="48" height="48" rx="10" fill="#0284C7" />
+      {/* National Tricolor ribbon arc + shield */}
+      <path d="M8 12h32" stroke="#FF9933" strokeWidth="3" strokeLinecap="round" />
+      <path d="M8 17h32" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" />
+      <path d="M8 22h32" stroke="#138808" strokeWidth="3" strokeLinecap="round" />
+      <path d="M24 23l10 5v9c0 5-10 8-10 8s-10-3-10-8v-9l10-5z" fill="#0369A1" stroke="#FFFFFF" strokeWidth="1.5" />
+      <path d="M20 33l3 3 5-6" stroke="#FEF08A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+// 16. GePNIC — Government e-Procurement System of NIC
+export function GepnicLogo({ size = 32, className = '' }: LogoProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <rect width="48" height="48" rx="10" fill="#4F46E5" />
+      {/* Network nodes & digital certificate seal */}
+      <circle cx="24" cy="24" r="15" stroke="#FFFFFF" strokeWidth="2" strokeDasharray="4 2" />
+      <circle cx="24" cy="15" r="4" fill="#A5B4FC" />
+      <circle cx="15" cy="30" r="4" fill="#A5B4FC" />
+      <circle cx="33" cy="30" r="4" fill="#A5B4FC" />
+      <path d="M24 19L15 26M24 19L33 26M19 30h10" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+      <circle cx="24" cy="24" r="3" fill="#FDE047" />
+    </svg>
+  )
+}
+
+// 17. MSTC Limited — e-Commerce & e-Auctions
+export function MstcLogo({ size = 32, className = '' }: LogoProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <rect width="48" height="48" rx="10" fill="#7E22CE" />
+      {/* Gavel & dynamic marketplace arrows */}
+      <circle cx="24" cy="24" r="16" stroke="#D8B4FE" strokeWidth="2" />
+      <path d="M15 29l7-7 4 4-7 7-4-4z" fill="#FDE047" />
+      <rect x="23" y="15" width="10" height="6" rx="1" transform="rotate(45 23 15)" fill="#FFFFFF" />
+      <path d="M13 36h10" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+// 18. IREPS — Indian Railways E-Procurement System
+export function IrepsLogo({ size = 32, className = '' }: LogoProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <rect width="48" height="48" rx="10" fill="#0E7490" />
+      {/* High-speed rail front & digital antenna */}
+      <path d="M16 14h16l4 18H12l4-18z" fill="#155E75" stroke="#FFFFFF" strokeWidth="2" strokeLinejoin="round" />
+      <circle cx="19" cy="26" r="2.5" fill="#FEF08A" />
+      <circle cx="29" cy="26" r="2.5" fill="#FEF08A" />
+      <path d="M21 14V9h6v5M13 37h22" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+      <path d="M24 20h.01" stroke="#38BDF8" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+// 19. State eTenders — State Government Procurement Portals
+export function StateTenderLogo({ size = 32, className = '' }: LogoProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <rect width="48" height="48" rx="10" fill="#059669" />
+      {/* State pillar emblem & certified bid envelope */}
+      <rect x="12" y="15" width="24" height="18" rx="2" fill="#047857" stroke="#FFFFFF" strokeWidth="2" />
+      <path d="M12 18l12 9 12-9" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="24" cy="38" r="3" fill="#FDE047" />
+    </svg>
+  )
+}
+
+// 20. Central PSU Portals — ONGC, BHEL, NTPC, IOCL E-Tender Desk
+export function PsuPortalLogo({ size = 32, className = '' }: LogoProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <rect width="48" height="48" rx="10" fill="#B45309" />
+      {/* Industrial cog & energy nucleus */}
+      <circle cx="24" cy="24" r="14" stroke="#FDE68A" strokeWidth="2" strokeDasharray="3 3" />
+      <circle cx="24" cy="24" r="7" fill="#92400E" stroke="#FFFFFF" strokeWidth="2" />
+      <circle cx="24" cy="24" r="2.5" fill="#F59E0B" />
+      <path d="M24 10v4M24 34v4M10 24h4M34 24h4" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  )
+}
+

@@ -61,8 +61,16 @@ const icons = [
 
 export default function TrustBar() {
   return (
-    <section style={{ background: 'var(--bg-surface)', borderBottom: '1px solid var(--border)' }}>
-      <div className="container-main py-10">
+    <section className="relative overflow-hidden" style={{ background: 'var(--bg-surface)', borderBottom: '1px solid var(--border)' }}>
+      {/* Subtle micro-coordinate pattern */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.025]"
+        style={{
+          backgroundImage: 'radial-gradient(circle, var(--text-primary) 1px, transparent 1px)',
+          backgroundSize: '20px 20px',
+        }}
+      />
+      <div className="container-main py-10 relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-4">
           {values.map((item, i) => {
             const Icon = icons[i]

@@ -30,6 +30,15 @@ export default function Hero() {
             backgroundSize: '32px 32px',
           }}
         />
+        {/* Subtle, barely visible Indian professional consultancy watermark overlay */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-[0.035] mix-blend-luminosity filter contrast-125"
+          style={{
+            backgroundImage: 'url(/indian-professionals.png)',
+            maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 85%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, black 30%, transparent 85%)',
+          }}
+        />
         {/* Top-right ambient lighting */}
         <div
           className="absolute -top-40 right-[-10%] w-[650px] h-[650px] rounded-full blur-[120px] opacity-25 pointer-events-none"

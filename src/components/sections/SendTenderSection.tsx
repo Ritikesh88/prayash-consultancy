@@ -157,11 +157,31 @@ export default function SendTenderSection({ compact = false }: SendTenderSection
 
   return (
     <section
-      className={compact ? '' : 'section-padding'}
+      className={compact ? '' : 'section-padding relative overflow-hidden'}
       style={compact ? {} : { background: 'var(--bg-base)' }}
       id="send-tender"
     >
-      <div className={compact ? '' : 'container-main max-w-3xl mx-auto'}>
+      {!compact && (
+        <>
+          {/* Subtle security document pattern */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-[0.02]"
+            style={{
+              backgroundImage: 'radial-gradient(circle at 100% 100%, var(--accent) 0, transparent 40%), radial-gradient(circle at 0% 0%, var(--accent) 0, transparent 40%)',
+            }}
+          />
+          {/* Barely visible consultant advisor silhouette watermark */}
+          <div
+            className="absolute right-0 bottom-0 w-80 h-80 bg-contain bg-no-repeat bg-right-bottom pointer-events-none opacity-[0.03] mix-blend-luminosity filter contrast-125"
+            style={{
+              backgroundImage: 'url(/avatar-1.png)',
+              maskImage: 'radial-gradient(ellipse at bottom right, black 20%, transparent 75%)',
+              WebkitMaskImage: 'radial-gradient(ellipse at bottom right, black 20%, transparent 75%)',
+            }}
+          />
+        </>
+      )}
+      <div className={compact ? '' : 'container-main max-w-3xl mx-auto relative z-10'}>
         {!compact && (
           <div className="text-center mb-10">
             <div className="tag tag-accent mb-4 mx-auto w-fit">Direct Assessment</div>

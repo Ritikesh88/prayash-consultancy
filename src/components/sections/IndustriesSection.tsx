@@ -10,8 +10,10 @@ const iconMap: Record<string, React.ComponentType<{ size: number; className?: st
 
 export default function IndustriesSection() {
   return (
-    <section className="section-padding" style={{ background: 'var(--bg-base)' }}>
-      <div className="container-main">
+    <section className="section-padding relative overflow-hidden" style={{ background: 'var(--bg-base)' }}>
+      {/* Subtle isometric technical grid pattern */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.02] pattern-isometric" />
+      <div className="container-main relative z-10">
         <SectionReveal>
           <div className="text-center mb-12">
             <div className="tag tag-accent mb-4 mx-auto w-fit">Supported Sectors</div>

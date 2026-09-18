@@ -347,7 +347,8 @@
   /* Accessibility: Prefers reduced motion */
   @media (prefers-reduced-motion: reduce) {
     .marquee-track,
-    .ticker-track {
+    .ticker-track,
+    .flow-beam {
       animation: none !important;
       overflow-x: auto;
     }
@@ -356,5 +357,92 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+  }
+
+  /* ── FLOW BEAM ANIMATION (Tender Journey Left-to-Right Flow) ── */
+  @keyframes beam-travel {
+    0% {
+      left: -15%;
+      opacity: 0;
+    }
+    15% {
+      opacity: 1;
+    }
+    85% {
+      opacity: 1;
+    }
+    100% {
+      left: 105%;
+      opacity: 0;
+    }
+  }
+
+  @keyframes beam-pulse {
+    0%, 100% {
+      box-shadow: 0 0 10px #0D9488, 0 0 20px rgba(13, 148, 136, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 22px #2DD4BF, 0 0 35px rgba(45, 212, 191, 0.6);
+    }
+  }
+
+  .flow-track {
+    position: relative;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, 
+      rgba(13, 148, 136, 0.15) 0%, 
+      rgba(13, 148, 136, 0.35) 50%, 
+      rgba(13, 148, 136, 0.15) 100%
+    );
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+
+  .flow-beam {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 160px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      #0D9488 40%, 
+      #2DD4BF 80%, 
+      #FFFFFF 95%, 
+      transparent 100%
+    );
+    filter: drop-shadow(0 0 8px #2DD4BF);
+    animation: beam-travel 3.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  /* ── SECTION BACKGROUND PATTERNS (Subtle & Barely Visible) ── */
+  .pattern-blueprint-grid {
+    background-image: 
+      linear-gradient(to right, var(--text-primary) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--text-primary) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .pattern-crosshatch {
+    background-image: radial-gradient(var(--text-primary) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+  }
+
+  .pattern-circuits {
+    background-image: 
+      radial-gradient(circle at 50% 50%, var(--accent) 1px, transparent 1px),
+      linear-gradient(to right, var(--accent) 0.5px, transparent 0.5px);
+    background-size: 40px 40px, 40px 40px;
+  }
+
+  .pattern-isometric {
+    background-image: linear-gradient(30deg, var(--text-primary) 12%, transparent 12.5%, transparent 87%, var(--text-primary) 87.5%, var(--text-primary)),
+      linear-gradient(150deg, var(--text-primary) 12%, transparent 12.5%, transparent 87%, var(--text-primary) 87.5%, var(--text-primary)),
+      linear-gradient(30deg, var(--text-primary) 12%, transparent 12.5%, transparent 87%, var(--text-primary) 87.5%, var(--text-primary)),
+      linear-gradient(150deg, var(--text-primary) 12%, transparent 12.5%, transparent 87%, var(--text-primary) 87.5%, var(--text-primary)),
+      linear-gradient(60deg, var(--text-primary) 25%, transparent 25.5%, transparent 75%, var(--text-primary) 75%, var(--text-primary)),
+      linear-gradient(60deg, var(--text-primary) 25%, transparent 25.5%, transparent 75%, var(--text-primary) 75%, var(--text-primary));
+    background-size: 60px 104px;
+    background-position: 0 0, 0 0, 30px 52px, 30px 52px, 0 0, 30px 52px;
   }
 }
