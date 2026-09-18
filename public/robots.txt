@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Disallow admin or internal paths (if added in Phase 2)
+# Disallow: /admin/
+# Disallow: /api/
+
+Sitemap: https://prayashconsultancy.com/sitemap.xml
