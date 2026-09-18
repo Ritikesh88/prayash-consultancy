@@ -109,7 +109,7 @@ export default function Header() {
             <Link
               to="/send-tender"
               onClick={() => trackEvent(EVENTS.CTA_SEND_TENDER_CLICK, { location: 'header' })}
-              className="px-4 py-2 text-sm font-semibold text-white rounded-lg transition-all duration-150"
+              className="px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-150"
               style={{
                 border: '1px solid var(--border-md)',
                 background: 'var(--bg-card)',
