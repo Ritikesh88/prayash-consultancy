@@ -4,98 +4,29 @@ import {
   UploadCloud, Trophy, ArrowRight, ShieldCheck, Zap
 } from 'lucide-react'
 import SectionReveal from '@/components/ui/SectionReveal'
+import { useContent } from '@/context/ContentContext'
 
-interface Stage {
-  id: string
-  step: string
-  label: string
-  title: string
-  desc: string
-  deliverable: string
-  sla: string
-  color: string
-  icon: typeof KeyRound
-}
-
-const stages: Stage[] = [
-  {
-    id: 'onboard',
-    step: '01',
-    label: 'ONBOARD',
-    title: 'Portal Enrollment & DSC',
-    desc: 'Class 3 DSC token configuration, primary GeM seller authorization, and multi-portal credentials setup.',
-    deliverable: 'Verified Portal Profiles & Cryptographic Setup',
-    sla: 'Day 1 — 24h Setup',
-    color: '#0D9488',
-    icon: KeyRound,
-  },
-  {
-    id: 'discover',
-    step: '02',
-    label: 'DISCOVER',
-    title: 'Opportunity Intelligence',
-    desc: 'Automated scraping and manual scrutiny across GeM, CPPP & state portals matching your exact eligibility.',
-    deliverable: 'Daily Filtered Bid Tracker & MSME Exemption Alerts',
-    sla: 'Real-time Daily Scans',
-    color: '#0284C7',
-    icon: Search,
-  },
-  {
-    id: 'assess',
-    step: '03',
-    label: 'ASSESS',
-    title: 'Eligibility & Feasibility',
-    desc: 'Deep audit of turnover limits, prior experience criteria, BOQ scope, and joint-venture clauses.',
-    deliverable: 'Formal Go / No-Go Risk Assessment Matrix',
-    sla: 'Within 12h of Notice',
-    color: '#6366F1',
-    icon: ShieldCheck,
-  },
-  {
-    id: 'prepare',
-    step: '04',
-    label: 'PREPARE',
-    title: 'Bid Engineering & BOQ',
-    desc: 'Drafting clause-by-clause compliance, technical annexures, EMD / Bank Guarantee draft, and price sheet.',
-    deliverable: 'Flawless Pre-Submission Technical Binder',
-    sla: 'Dual-Expert Peer Review',
-    color: '#EC4899',
-    icon: FileSpreadsheet,
-  },
-  {
-    id: 'submit',
-    step: '05',
-    label: 'SUBMIT',
-    title: 'Digital Cryptographic Filing',
-    desc: 'Final document encryption, DSC digital signing, and upload verification well ahead of the deadline.',
-    deliverable: 'Official Portal Acknowledgement & Timestamp Slip',
-    sla: '6h Before Portal Cutoff',
-    color: '#F59E0B',
-    icon: UploadCloud,
-  },
-  {
-    id: 'track',
-    step: '06',
-    label: 'TRACK',
-    title: 'Opening & Award Defense',
-    desc: 'Monitoring technical bid opening, counter-representations for queries, and reverse auction bidding support.',
-    deliverable: 'Award Tracking & Commercial Scrutiny Report',
-    sla: 'Until Final Allocation',
-    color: '#10B981',
-    icon: Trophy,
-  },
-]
+const defaultIcons = [KeyRound, Search, ShieldCheck, FileSpreadsheet, UploadCloud, Trophy]
 
 export default function TenderWorkflow() {
+  const { content } = useContent()
+  const stages = (content.workflowStages || []).map((stage, idx) => ({
+    ...stage,
+    icon: defaultIcons[idx % defaultIcons.length],
+  }))
+
   const [activeStage, setActiveStage] = useState(0)
 
   // Subtle cyclic highlight simulating left-to-right workflow progress
   useEffect(() => {
+    if (stages.length === 0) return
     const timer = setInterval(() => {
       setActiveStage((prev) => (prev + 1) % stages.length)
     }, 4200)
     return () => clearInterval(timer)
-  }, [])
+  }, [stages.length])
+
+  if (stages.length === 0) return null
 
   return (
     <section

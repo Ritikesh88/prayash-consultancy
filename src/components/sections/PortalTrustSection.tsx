@@ -2,74 +2,21 @@ import {
   GemLogo, CpppLogo, GepnicLogo, MstcLogo, IrepsLogo,
   StateTenderLogo, PsuPortalLogo,
 } from '@/components/ui/governmentLogos'
+import { useContent } from '@/context/ContentContext'
 
-const portals = [
-  {
-    name: 'GeM',
-    full: 'Government e-Marketplace',
-    category: 'Central Goods & Services',
-    domain: 'gem.gov.in',
-    color: '#0D9488',
-    status: 'Direct API & Cataloging',
-    Logo: GemLogo,
-  },
-  {
-    name: 'CPPP',
-    full: 'Central Public Procurement',
-    category: 'Central Ministries & PSUs',
-    domain: 'eprocure.gov.in',
-    color: '#0284C7',
-    status: 'Daily Scrape & Bid Alerts',
-    Logo: CpppLogo,
-  },
-  {
-    name: 'GePNIC',
-    full: 'NIC e-Procurement Portal',
-    category: 'National Informatics Centre',
-    domain: 'gepnic.gov.in',
-    color: '#4F46E5',
-    status: 'DSC Token Support',
-    Logo: GepnicLogo,
-  },
-  {
-    name: 'MSTC',
-    full: 'PSU e-Auctions & Tenders',
-    category: 'Raw Materials & Scrap',
-    domain: 'mstcecommerce.com',
-    color: '#7E22CE',
-    status: 'Reverse Auction Assistance',
-    Logo: MstcLogo,
-  },
-  {
-    name: 'IREPS',
-    full: 'Indian Railways E-Procurement',
-    category: 'Rail Stores & Works',
-    domain: 'ireps.gov.in',
-    color: '#0E7490',
-    status: 'Vendor Approval Tracking',
-    Logo: IrepsLogo,
-  },
-  {
-    name: 'State eTenders',
-    full: 'State Government Portals',
-    category: '28+ States & UTs Nationwide',
-    domain: 'etenders.gov.in',
-    color: '#059669',
-    status: 'Local Preference & PWD',
-    Logo: StateTenderLogo,
-  },
-  {
-    name: 'PSU Portals',
-    full: 'Direct CPSE Desks',
-    category: 'ONGC, BHEL, NTPC, IOCL',
-    domain: 'cpse-tenders.in',
-    color: '#B45309',
-    status: 'Turnkey BOQ Costing',
-    Logo: PsuPortalLogo,
-  },
-]
+const logoLookup: Record<string, typeof GemLogo> = {
+  GeM: GemLogo,
+  CPPP: CpppLogo,
+  GePNIC: GepnicLogo,
+  MSTC: MstcLogo,
+  IREPS: IrepsLogo,
+  'State eTenders': StateTenderLogo,
+  'PSU Portals': PsuPortalLogo,
+}
 
 export default function PortalTrustSection() {
+  const { content } = useContent()
+  const portals = content.portals || []
   return (
     <section
       className="py-12 border-b relative overflow-hidden"
@@ -109,7 +56,7 @@ export default function PortalTrustSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
           {portals.map((portal) => {
-            const Logo = portal.Logo
+            const Logo = logoLookup[portal.name] || GemLogo
             return (
               <div
                 key={portal.name}

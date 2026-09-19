@@ -3,28 +3,35 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { HelmetProvider, Helmet } from 'react-helmet-async'
 import { useEffect } from 'react'
 import { ThemeProvider } from '@/context/ThemeContext'
+import { AuthProvider } from '@/context/AuthContext'
+import { ContentProvider } from '@/context/ContentContext'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import FloatingWhatsApp from '@/components/ui/FloatingWhatsApp'
 import MobileContactBar from '@/components/ui/MobileContactBar'
 import TenderTicker from '@/components/ui/TenderTicker'
+import AdminGuard from '@/components/admin/AdminGuard'
 import { siteConfig } from '@/config/siteConfig'
 
 // Eagerly load the Home page (critical path)
 import Home from '@/pages/Home'
 
 // Lazy-load secondary pages for code splitting
-const Services      = lazy(() => import('@/pages/Services'))
+const Services       = lazy(() => import('@/pages/Services'))
 const HowItWorksPage = lazy(() => import('@/pages/HowItWorksPage'))
-const Industries    = lazy(() => import('@/pages/Industries'))
-const About         = lazy(() => import('@/pages/About'))
-const FAQPage       = lazy(() => import('@/pages/FAQPage'))
-const Contact       = lazy(() => import('@/pages/Contact'))
-const SendTender    = lazy(() => import('@/pages/SendTender'))
-const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'))
+const Industries     = lazy(() => import('@/pages/Industries'))
+const About          = lazy(() => import('@/pages/About'))
+const FAQPage        = lazy(() => import('@/pages/FAQPage'))
+const Contact        = lazy(() => import('@/pages/Contact'))
+const SendTender     = lazy(() => import('@/pages/SendTender'))
+const PrivacyPolicy  = lazy(() => import('@/pages/PrivacyPolicy'))
 const TermsConditions = lazy(() => import('@/pages/TermsConditions'))
-const ClientLogin   = lazy(() => import('@/pages/ClientLogin'))
-const NotFound      = lazy(() => import('@/pages/NotFound'))
+const ClientLogin    = lazy(() => import('@/pages/ClientLogin'))
+const NotFound       = lazy(() => import('@/pages/NotFound'))
+
+// Admin CMS Pages
+const AdminLogin     = lazy(() => import('@/pages/admin/AdminLogin'))
+const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'))
 
 // Organization JSON-LD schema
 const orgSchema = JSON.stringify({
@@ -66,6 +73,30 @@ function ScrollToTop() {
 }
 
 function AppLayout() {
+  const { pathname } = useLocation()
+  const isAdminRoute = pathname.startsWith('/admin')
+
+  if (isAdminRoute) {
+    return (
+      <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg-base)' }}>
+        <ScrollToTop />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route
+              path="/admin"
+              element={
+                <AdminGuard>
+                  <AdminDashboard />
+                </AdminGuard>
+              }
+            />
+          </Routes>
+        </Suspense>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg-base)' }}>
       <Helmet>
@@ -94,6 +125,15 @@ function AppLayout() {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms"         element={<TermsConditions />} />
             <Route path="/client-login"  element={<ClientLogin />} />
+            <Route path="/admin/login"   element={<AdminLogin />} />
+            <Route
+              path="/admin"
+              element={
+                <AdminGuard>
+                  <AdminDashboard />
+                </AdminGuard>
+              }
+            />
             <Route path="*"              element={<NotFound />} />
           </Routes>
         </Suspense>
@@ -109,9 +149,13 @@ function AppLayout() {
 function ThemedApp() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
-        <AppLayout />
-      </BrowserRouter>
+      <AuthProvider>
+        <ContentProvider>
+          <BrowserRouter>
+            <AppLayout />
+          </BrowserRouter>
+        </ContentProvider>
+      </AuthProvider>
     </ThemeProvider>
   )
 }

@@ -1,46 +1,16 @@
 import { ShieldCheck, Target, Layers, FileCheck, PhoneCall, Zap } from 'lucide-react'
 import SectionReveal from '@/components/ui/SectionReveal'
+import { useContent } from '@/context/ContentContext'
 
-const differentiators = [
-  {
-    icon: Target,
-    title: 'Pre-Bid Eligibility Auditing',
-    desc: 'Before investing weeks in bid prep, we verify your turnover, past work orders, and technical specs against the tender qualification sheet.',
-    color: '#0D9488',
-  },
-  {
-    icon: Layers,
-    title: 'Multi-Portal Desk Operations',
-    desc: 'Deep familiarity with GeM 4.0, CPPP (eProcure), IREPS, GePNIC, and state eTender portals. Zero confusion over conflicting portal parameters.',
-    color: '#0891B2',
-  },
-  {
-    icon: FileCheck,
-    title: 'Error-Free Technical Bids',
-    desc: 'Every affidavit, solvency certificate, compliance sheet, and BoQ matrix is cross-checked against statutory criteria to prevent disqualification.',
-    color: '#8B5CF6',
-  },
-  {
-    icon: Zap,
-    title: 'Corrigendum & Extension Tracking',
-    desc: 'Government tenders frequently issue crucial amendments. Our desk monitors daily updates so your bid reflects the latest requirements.',
-    color: '#F59E0B',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Zero-Credential Risk Policy',
-    desc: 'We never ask for or store your portal passwords, DSC private keys, or PINs. All authorization and OTP signing remain in your hands.',
-    color: '#10B981',
-  },
-  {
-    icon: PhoneCall,
-    title: 'Direct Consultant Access',
-    desc: 'No generic ticket queues. Speak directly with experienced tender coordinators via dedicated WhatsApp group and direct call.',
-    color: '#EC4899',
-  },
-]
+const icons = [Target, Layers, FileCheck, Zap, ShieldCheck, PhoneCall]
 
 export default function WhyUs() {
+  const { content } = useContent()
+  const differentiators = (content.whyUsItems || []).map((item, idx) => ({
+    ...item,
+    icon: icons[idx % icons.length],
+  }))
+
   return (
     <section className="section-padding relative overflow-hidden" style={{ background: 'var(--bg-subtle)' }}>
       {/* Subtle diamond trellis pattern */}

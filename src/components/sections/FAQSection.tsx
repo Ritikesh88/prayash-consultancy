@@ -1,12 +1,13 @@
 import FAQAccordion from '@/components/ui/FAQAccordion'
-import { faqData } from '@/config/faqData'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import SectionReveal from '@/components/ui/SectionReveal'
+import { useContent } from '@/context/ContentContext'
 
 export default function FAQSection() {
+  const { content } = useContent()
   // Show first 6 on homepage
-  const preview = faqData.slice(0, 6)
+  const preview = (content.faqs || []).slice(0, 6)
 
   return (
     <section className="section-padding relative overflow-hidden" style={{ background: 'var(--bg-base)' }}>

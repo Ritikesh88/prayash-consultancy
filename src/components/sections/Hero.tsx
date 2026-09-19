@@ -4,19 +4,22 @@ import {
   ArrowRight, MessageCircle, CheckCircle2, Shield,
   Clock, UploadCloud, ChevronRight, Check,
 } from 'lucide-react'
-import { whatsappUrl } from '@/config/siteConfig'
 import { trackEvent, EVENTS } from '@/lib/analytics'
 import SectionReveal from '@/components/ui/SectionReveal'
-
-const tenderTabs = [
-  { id: 'gem', label: 'GeM Bid #894120', agency: 'Ministry of Defence (MES)', value: '₹4.20 Cr', readiness: 94 },
-  { id: 'cppp', label: 'CPPP Tender #44192', agency: 'Indian Railways (CRIS)', value: '₹1.85 Cr', readiness: 88 },
-  { id: 'state', label: 'State eTender #1082', agency: 'PWD Rajasthan', value: '₹6.50 Cr', readiness: 76 },
-]
+import { useContent } from '@/context/ContentContext'
 
 export default function Hero() {
+  const { content } = useContent()
+  const hero = content.hero
+  const siteInfo = content.siteInfo
+  const tenderTabs = hero.tabs && hero.tabs.length > 0 ? hero.tabs : [
+    { id: 'gem', label: 'GeM Bid #894120', agency: 'Ministry of Defence (MES)', value: '₹4.20 Cr', readiness: 94 },
+    { id: 'cppp', label: 'CPPP Tender #44192', agency: 'Indian Railways (CRIS)', value: '₹1.85 Cr', readiness: 88 },
+    { id: 'state', label: 'State eTender #1082', agency: 'PWD Rajasthan', value: '₹6.50 Cr', readiness: 76 },
+  ]
+
   const [activeTab, setActiveTab] = useState(0)
-  const currentTender = tenderTabs[activeTab]
+  const currentTender = tenderTabs[activeTab] || tenderTabs[0]
 
   return (
     <section className="relative min-h-[92vh] flex items-center pt-28 pb-20 overflow-hidden">
@@ -65,11 +68,11 @@ export default function Hero() {
             >
               <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
               <span className="text-xs font-bold tracking-wide" style={{ color: 'var(--accent)' }}>
-                Government Procurement Desk
+                {hero.badgeLabel}
               </span>
               <span style={{ color: 'var(--border-md)' }}>·</span>
               <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>
-                GeM · CPPP · State eTenders
+                {hero.badgeSub}
               </span>
             </div>
 
@@ -78,7 +81,7 @@ export default function Hero() {
               className="text-4xl sm:text-5xl lg:text-[3.65rem] font-extrabold mb-6 leading-[1.08] tracking-[-0.03em]"
               style={{ color: 'var(--text-primary)' }}
             >
-              Government Tenders.{' '}
+              {hero.headline}{' '}
               <span
                 className="block mt-1"
                 style={{
@@ -88,7 +91,7 @@ export default function Hero() {
                   backgroundClip: 'text',
                 }}
               >
-                Managed From Start to Finish.
+                {hero.headlineAccent}
               </span>
             </h1>
 
@@ -97,7 +100,7 @@ export default function Hero() {
               className="text-base sm:text-lg mb-8 max-w-xl leading-relaxed"
               style={{ color: 'var(--text-secondary)' }}
             >
-              Your dedicated, outsourced tender back-office. We assist contractors, manufacturers, and MSMEs with vendor onboarding, qualification vetting, technical bid compilation, and submission support across India.
+              {hero.subheadline}
             </p>
 
             {/* Key Value Metric Pills */}
@@ -106,22 +109,22 @@ export default function Hero() {
                 className="p-3 rounded-xl border text-center"
                 style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
               >
-                <p className="text-lg sm:text-xl font-black" style={{ color: 'var(--accent)' }}>₹500Cr+</p>
-                <p className="text-[11px] font-medium" style={{ color: 'var(--text-muted)' }}>Tender Opportunities</p>
+                <p className="text-lg sm:text-xl font-black" style={{ color: 'var(--accent)' }}>{hero.metric1Number}</p>
+                <p className="text-[11px] font-medium" style={{ color: 'var(--text-muted)' }}>{hero.metric1Label}</p>
               </div>
               <div
                 className="p-3 rounded-xl border text-center"
                 style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
               >
-                <p className="text-lg sm:text-xl font-black" style={{ color: '#10B981' }}>100%</p>
-                <p className="text-[11px] font-medium" style={{ color: 'var(--text-muted)' }}>Document Vetted</p>
+                <p className="text-lg sm:text-xl font-black" style={{ color: '#10B981' }}>{hero.metric2Number}</p>
+                <p className="text-[11px] font-medium" style={{ color: 'var(--text-muted)' }}>{hero.metric2Label}</p>
               </div>
               <div
                 className="p-3 rounded-xl border text-center"
                 style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
               >
-                <p className="text-lg sm:text-xl font-black" style={{ color: 'var(--text-primary)' }}>Zero</p>
-                <p className="text-[11px] font-medium" style={{ color: 'var(--text-muted)' }}>Password Storage</p>
+                <p className="text-lg sm:text-xl font-black" style={{ color: 'var(--text-primary)' }}>{hero.metric3Number}</p>
+                <p className="text-[11px] font-medium" style={{ color: 'var(--text-muted)' }}>{hero.metric3Label}</p>
               </div>
             </div>
 
@@ -136,7 +139,7 @@ export default function Hero() {
                 onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--accent-hover)')}
                 onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--accent)')}
               >
-                Get Tender Consultation
+                {hero.primaryCtaText}
                 <ArrowRight size={16} />
               </Link>
               <Link
@@ -153,7 +156,7 @@ export default function Hero() {
                 onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border)')}
               >
                 <UploadCloud size={16} style={{ color: 'var(--accent)' }} />
-                Send Tender for Review
+                {hero.secondaryCtaText}
               </Link>
             </div>
 
@@ -197,7 +200,7 @@ export default function Hero() {
 
               {/* Direct WhatsApp link */}
               <a
-                href={whatsappUrl}
+                href={`https://wa.me/${siteInfo.whatsapp}?text=Hello%20Prayash%20Consultancy%2C%20I%20need%20assistance%20with%20a%20government%20tender.`}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent(EVENTS.WHATSAPP_CLICK, { location: 'hero_proof' })}

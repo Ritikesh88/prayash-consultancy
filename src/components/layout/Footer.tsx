@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Phone, Mail, MapPin, Clock, MessageCircle } from 'lucide-react'
+import { Phone, Mail, MapPin, Clock, MessageCircle, Lock } from 'lucide-react'
 import { siteConfig, whatsappUrl } from '@/config/siteConfig'
 import { trackEvent, EVENTS } from '@/lib/analytics'
 import ThemeToggle from '@/components/ui/ThemeToggle'
@@ -199,6 +199,10 @@ export default function Footer() {
               <div className="flex items-center gap-4">
                 <Link to="/privacy-policy" className="text-[11px] transition-colors" style={{ color: 'var(--text-faint)' }}>Privacy Policy</Link>
                 <Link to="/terms" className="text-[11px] transition-colors" style={{ color: 'var(--text-faint)' }}>Terms & Conditions</Link>
+                <Link to="/admin" className="text-[11px] transition-colors flex items-center gap-1 font-medium text-teal-600 dark:text-teal-400" title="Desk Administration & CMS">
+                  <Lock size={10} />
+                  <span>Admin CMS</span>
+                </Link>
               </div>
             </div>
           </div>

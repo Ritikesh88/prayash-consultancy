@@ -1,31 +1,11 @@
 import { XCircle, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import SectionReveal from '@/components/ui/SectionReveal'
-
-const comparisonData = [
-  {
-    pain: 'Navigating dozens of state & central eTender portals with different logins',
-    fix: 'Single point of contact managing GeM, CPPP, IREPS, and state portals',
-  },
-  {
-    pain: 'Technical disqualification due to missing clauses or non-standard affidavits',
-    fix: 'Comprehensive document audit against tender-specific qualification criteria',
-  },
-  {
-    pain: 'Scrambling for corrigendum amendments and deadline extensions at the last hour',
-    fix: 'Systematic deadline tracking and instant notification on published amendments',
-  },
-  {
-    pain: 'Uncertainty around MSME turnover exemptions and EMD security rules',
-    fix: 'Clear eligibility mapping ensuring maximum statutory exemptions (EMD/turnover)',
-  },
-  {
-    pain: 'High cost of hiring, training, and retaining an in-house government tender team',
-    fix: 'On-demand tender desk ready to prepare bids whenever relevant tenders publish',
-  },
-]
+import { useContent } from '@/context/ContentContext'
 
 export default function ProblemSection() {
+  const { content } = useContent()
+  const comparisonData = content.problemItems || []
   return (
     <section className="section-padding relative overflow-hidden" style={{ background: 'var(--bg-base)' }}>
       {/* Subtle cautionary diagonal grid pattern */}

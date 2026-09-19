@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Building2, Search, ClipboardCheck, FileText, Send, Award } from 'lucide-react'
-import { servicesData } from '@/config/servicesData'
 import { trackEvent, EVENTS } from '@/lib/analytics'
 import SectionReveal from '@/components/ui/SectionReveal'
+import { useContent } from '@/context/ContentContext'
 
 const iconMap: Record<string, React.ComponentType<{ size: number; className?: string }>> = {
   Building2,
@@ -14,6 +14,8 @@ const iconMap: Record<string, React.ComponentType<{ size: number; className?: st
 }
 
 export default function ServiceGrid() {
+  const { content } = useContent()
+  const servicesData = content.services || []
   return (
     <section className="section-padding relative overflow-hidden" style={{ background: 'var(--bg-base)' }}>
       {/* Subtle blueprint crosshatch pattern */}

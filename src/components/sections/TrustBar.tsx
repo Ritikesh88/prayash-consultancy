@@ -1,35 +1,4 @@
-const values = [
-  {
-    title: 'End-to-End Support',
-    desc: 'From onboarding and tender discovery to submission and post-award assistance.',
-    gradient: 'from-teal-500 to-cyan-500',
-    color: '#0D9488',
-  },
-  {
-    title: 'Tender-Focused Guidance',
-    desc: 'Understand what to prepare and what to expect before you invest time bidding.',
-    gradient: 'from-blue-500 to-indigo-500',
-    color: '#6366F1',
-  },
-  {
-    title: 'Document Support',
-    desc: 'Assistance organising, compiling and preparing the documents each tender requires.',
-    gradient: 'from-violet-500 to-purple-500',
-    color: '#8B5CF6',
-  },
-  {
-    title: 'Portal Assistance',
-    desc: 'Support across GeM, CPPP, state eTender portals and PSU procurement platforms.',
-    gradient: 'from-cyan-500 to-blue-500',
-    color: '#0891B2',
-  },
-  {
-    title: 'Human Consultation',
-    desc: 'Speak directly with a tender professional when you need context or guidance.',
-    gradient: 'from-emerald-500 to-teal-500',
-    color: '#10B981',
-  },
-]
+import { useContent } from '@/context/ContentContext'
 
 const icons = [
   ({ className }: { className?: string }) => (
@@ -60,6 +29,9 @@ const icons = [
 ]
 
 export default function TrustBar() {
+  const { content } = useContent()
+  const values = content.trustBar || []
+
   return (
     <section className="relative overflow-hidden" style={{ background: 'var(--bg-surface)', borderBottom: '1px solid var(--border)' }}>
       {/* Subtle micro-coordinate pattern */}

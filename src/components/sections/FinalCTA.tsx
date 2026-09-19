@@ -1,10 +1,15 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, MessageCircle, Phone } from 'lucide-react'
-import { whatsappUrl, siteConfig } from '@/config/siteConfig'
 import { trackEvent, EVENTS } from '@/lib/analytics'
 import SectionReveal from '@/components/ui/SectionReveal'
+import { useContent } from '@/context/ContentContext'
 
 export default function FinalCTA() {
+  const { content } = useContent()
+  const finalCta = content.finalCta
+  const siteInfo = content.siteInfo
+  const dynamicWhatsappUrl = `https://wa.me/${siteInfo.whatsapp}?text=Hello%20Prayash%20Consultancy%2C%20I%20need%20assistance%20with%20a%20government%20tender.`
+
   return (
     <section className="section-padding" style={{ background: 'var(--bg-subtle)' }}>
       <div className="container-main">
@@ -46,13 +51,13 @@ export default function FinalCTA() {
             </div>
 
             <div className="relative z-10 border border-[var(--border)] rounded-3xl px-8 py-14 sm:px-14 sm:py-16 text-center">
-              <div className="tag tag-accent mb-5 mx-auto w-fit">Get Started Today</div>
+              <div className="tag tag-accent mb-5 mx-auto w-fit">{finalCta.badge}</div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 tracking-tight" style={{ color: 'var(--text-primary)' }}>
-                Have a tender in mind?
+                {finalCta.headline}
               </h2>
               <p className="text-base max-w-lg mx-auto mb-10 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                Share the tender details with our desk and understand exactly what it takes to qualify and submit. No complicated jargon — just actionable guidance.
+                {finalCta.subheadline}
               </p>
 
               {/* Primary CTAs */}
@@ -66,11 +71,11 @@ export default function FinalCTA() {
                   onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--accent-hover)')}
                   onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--accent)')}
                 >
-                  Send Your Tender
+                  {finalCta.primaryButtonText}
                   <ArrowRight size={15} />
                 </Link>
                 <a
-                  href={whatsappUrl}
+                  href={dynamicWhatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   id="cta-final-whatsapp"
@@ -78,14 +83,14 @@ export default function FinalCTA() {
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-sm transition-colors text-white w-full sm:w-auto shadow-sm"
                   style={{ background: '#25D366' }}
                 >
-                  <MessageCircle size={16} />
-                  Talk on WhatsApp
+                  <MessageCircle size={17} />
+                  {finalCta.whatsappButtonText}
                 </a>
               </div>
 
               {/* Phone */}
               <a
-                href={siteConfig.phoneHref}
+                href={`tel:${siteInfo.phone}`}
                 onClick={() => trackEvent(EVENTS.PHONE_CLICK, { location: 'final_cta' })}
                 className="inline-flex items-center gap-2 text-sm transition-colors"
                 style={{ color: 'var(--text-muted)' }}
@@ -93,7 +98,7 @@ export default function FinalCTA() {
                 onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
               >
                 <Phone size={14} style={{ color: 'var(--accent)' }} />
-                Or call our desk at {siteConfig.phone}
+                Or call our desk at {siteInfo.phoneDisplay || siteInfo.phone}
               </a>
 
               {/* Trust line */}

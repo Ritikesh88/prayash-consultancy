@@ -76,6 +76,18 @@ export default function ClientLogin() {
               <ArrowLeft size={14} />
               Back to Home
             </Link>
+
+            <Link
+              to="/admin/login"
+              className="w-full py-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-2 text-teal-600 dark:text-teal-400 mt-2"
+              style={{
+                backgroundColor: 'rgba(13,148,136,0.06)',
+                borderColor: 'rgba(13,148,136,0.25)',
+              }}
+            >
+              <Lock size={12} />
+              Staff Administrator Login →
+            </Link>
           </div>
         </div>
       </main>
