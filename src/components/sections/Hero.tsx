@@ -128,6 +128,83 @@ export default function Hero() {
               </div>
             </div>
 
+            {/* ── 18-Year Ex-Govt Tender Evaluator Authority Card ── */}
+            <div
+              className="p-4 sm:p-4.5 rounded-2xl border mb-8 relative overflow-hidden transition-all duration-300 shadow-sm"
+              style={{
+                backgroundColor: 'var(--bg-card)',
+                borderColor: 'rgba(13, 148, 136, 0.35)',
+                boxShadow: '0 4px 20px -2px rgba(13, 148, 136, 0.08)',
+              }}
+            >
+              <div
+                className="absolute -right-10 -top-10 w-28 h-28 rounded-full blur-2xl opacity-20 pointer-events-none"
+                style={{ background: '#0D9488' }}
+              />
+
+              <div className="flex items-start sm:items-center gap-3.5 relative z-10">
+                <div className="relative flex-shrink-0">
+                  <div
+                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl border-2 overflow-hidden shadow-md"
+                    style={{ borderColor: 'var(--accent)' }}
+                  >
+                    <img
+                      src="/avatar-1.png"
+                      alt="18-Year Government Tender Evaluator"
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </div>
+                  <span
+                    className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase text-white shadow-xs"
+                    style={{ background: '#0D9488' }}
+                  >
+                    18+ Yrs
+                  </span>
+                </div>
+
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span
+                      className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border"
+                      style={{
+                        backgroundColor: 'rgba(13, 148, 136, 0.1)',
+                        borderColor: 'rgba(13, 148, 136, 0.3)',
+                        color: 'var(--accent)',
+                      }}
+                    >
+                      ★ Ex-Govt Insider Advantage
+                    </span>
+                    <span className="text-[11px] font-semibold text-emerald-500 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      18 Years in Govt Tenders Only
+                    </span>
+                  </div>
+                  <h4 className="text-xs sm:text-sm font-bold tracking-tight mt-0.5" style={{ color: 'var(--text-primary)' }}>
+                    Personally Advised by an Ex-Government Tender Creator & Committee Approver
+                  </h4>
+                </div>
+              </div>
+
+              <p className="text-xs sm:text-[13px] mt-2.5 leading-relaxed relative z-10" style={{ color: 'var(--text-secondary)' }}>
+                Unlike general agencies who guess rules from the outside, our chief consultant spent <strong style={{ color: 'var(--text-primary)' }}>18+ years inside government enterprises creating, evaluating, and approving tenders</strong>. Because he knows the scrutiny process, compliance scoring, and unwritten winning rules inside out, having Prayash review and consult your bid gives you <strong style={{ color: 'var(--accent)' }}>far higher chances of winning than any other competitor.</strong>
+              </p>
+
+              <div className="mt-3 pt-2.5 border-t flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] font-medium relative z-10" style={{ borderColor: 'var(--border)' }}>
+                <span className="flex items-center gap-1.5" style={{ color: 'var(--text-primary)' }}>
+                  <CheckCircle2 size={13} className="text-[#10B981]" />
+                  18 Yrs Exclusively in Govt Tenders
+                </span>
+                <span className="flex items-center gap-1.5" style={{ color: 'var(--text-primary)' }}>
+                  <CheckCircle2 size={13} className="text-[#10B981]" />
+                  Ex-Tender Drafter & Approver Insider Knowledge
+                </span>
+                <span className="flex items-center gap-1.5" style={{ color: 'var(--text-primary)' }}>
+                  <CheckCircle2 size={13} className="text-[#10B981]" />
+                  Significantly Higher Win Probability
+                </span>
+              </div>
+            </div>
+
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3.5 mb-8">
               <Link

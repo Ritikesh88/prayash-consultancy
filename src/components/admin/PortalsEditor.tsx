@@ -139,6 +139,20 @@ export default function PortalsEditor() {
                   style={{ backgroundColor: 'var(--bg-base)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
                 />
               </div>
+
+              <div className="col-span-2">
+                <label className="block text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>
+                  Direct Portal URL (Opens in new tab)
+                </label>
+                <input
+                  type="url"
+                  placeholder={`https://${portal.domain}`}
+                  value={portal.url || ''}
+                  onChange={e => handlePortalChange(idx, 'url', e.target.value)}
+                  className="w-full px-3 py-1.5 rounded-lg border text-xs outline-none font-mono"
+                  style={{ backgroundColor: 'var(--bg-base)', borderColor: 'var(--border)', color: 'var(--accent)' }}
+                />
+              </div>
             </div>
           </div>
         ))}

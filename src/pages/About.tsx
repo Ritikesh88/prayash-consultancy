@@ -151,6 +151,58 @@ export default function About() {
           </div>
         </section>
 
+        {/* Leadership & Govt Pedigree */}
+        <section className="py-14 border-t" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg-card)' }}>
+          <div className="container-main max-w-4xl">
+            <SectionReveal>
+              <div
+                className="p-8 sm:p-10 rounded-3xl border relative overflow-hidden shadow-sm"
+                style={{
+                  backgroundColor: 'var(--bg-surface)',
+                  borderColor: 'rgba(13, 148, 136, 0.35)',
+                }}
+              >
+                <div className="flex flex-col md:flex-row gap-8 items-center">
+                  <div className="relative flex-shrink-0">
+                    <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl border-2 overflow-hidden shadow-lg" style={{ borderColor: 'var(--accent)' }}>
+                      <img src="/avatar-1.png" alt="Lead Consultant & Ex-Government Tender Evaluator" className="w-full h-full object-cover object-top" />
+                    </div>
+                    <span className="absolute -bottom-2 -right-2 px-3 py-1 rounded-xl text-xs font-black uppercase text-white shadow-sm" style={{ background: '#0D9488' }}>
+                      18+ Yrs Exp
+                    </span>
+                  </div>
+
+                  <div className="space-y-3 text-left">
+                    <div
+                      className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-extrabold uppercase tracking-wider"
+                      style={{
+                        backgroundColor: 'rgba(13, 148, 136, 0.1)',
+                        borderColor: 'rgba(13, 148, 136, 0.3)',
+                        color: 'var(--accent)',
+                      }}
+                    >
+                      <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
+                      Our Leadership Pedigree
+                    </div>
+
+                    <h3 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+                      18+ Years Dealing Exclusively in Government Tenders
+                    </h3>
+
+                    <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                      Our advisory desk is spearheaded by a principal consultant with 18+ years of career experience inside government enterprises and PSUs. Having personally drafted tender notices, set eligibility thresholds, and served on tender scrutiny and approval committees, he understands the evaluation mindset from the inside out.
+                    </p>
+
+                    <p className="text-sm leading-relaxed font-medium" style={{ color: 'var(--text-primary)' }}>
+                      When Prayash reviews your tender bid, every document, solvency certificate, and BOQ line item is scrutinized through the eyes of the government committee that will award the contract — maximizing your winning probability above competing bidders.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </SectionReveal>
+          </div>
+        </section>
+
         {/* Disclaimer */}
         <section className="py-8" style={{ borderTop: '1px solid var(--border)' }}>
           <div className="container-main max-w-3xl">

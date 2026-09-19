@@ -37,6 +37,101 @@ export default function WhyUs() {
           </div>
         </SectionReveal>
 
+        {/* ── Spotlight: 18-Year Ex-Govt Tender Drafter & Evaluator Inside Advantage ── */}
+        <SectionReveal>
+          <div
+            className="mb-10 p-6 sm:p-8 rounded-3xl border relative overflow-hidden shadow-lg"
+            style={{
+              backgroundColor: 'var(--bg-card)',
+              borderColor: 'rgba(13, 148, 136, 0.4)',
+              background: 'linear-gradient(135deg, var(--bg-card) 0%, rgba(13, 148, 136, 0.05) 100%)',
+            }}
+          >
+            <div
+              className="absolute -right-16 -top-16 w-60 h-60 rounded-full blur-3xl opacity-20 pointer-events-none"
+              style={{ background: '#0D9488' }}
+            />
+
+            <div className="grid lg:grid-cols-12 gap-8 items-center relative z-10">
+              <div className="lg:col-span-8 space-y-3.5">
+                <div
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-extrabold uppercase tracking-wider"
+                  style={{
+                    backgroundColor: 'rgba(13, 148, 136, 0.12)',
+                    borderColor: 'rgba(13, 148, 136, 0.35)',
+                    color: 'var(--accent)',
+                  }}
+                >
+                  <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
+                  The Unfair Competitive Advantage
+                </div>
+
+                <h3 className="text-2xl sm:text-3xl font-black tracking-tight" style={{ color: 'var(--text-primary)' }}>
+                  Why Our Win Rate Is Higher: 18 Years Working Inside Govt Tender Approval Committees
+                </h3>
+
+                <p className="text-sm sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                  Most agencies guess what government officers want. At Prayash, your bids are reviewed and guided by a professional with <strong style={{ color: 'var(--text-primary)' }}>18+ years of experience dealing exclusively in government tenders</strong>, having worked directly inside government bodies and PSUs that <strong style={{ color: 'var(--text-primary)' }}>draft the tenders and approve the bids</strong>. He knows the tender process and winning rules from the inside out — ensuring our clients consistently beat rival bidders.
+                </p>
+
+                <div className="grid sm:grid-cols-3 gap-3 pt-2">
+                  <div className="p-3.5 rounded-xl border bg-black/5 dark:bg-white/5" style={{ borderColor: 'var(--border)' }}>
+                    <p className="text-xs font-bold text-accent mb-1">01. Inside Drafting Logic</p>
+                    <p className="text-[12px] leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                      We know how technical specs and qualification criteria are formulated by government officers.
+                    </p>
+                  </div>
+                  <div className="p-3.5 rounded-xl border bg-black/5 dark:bg-white/5" style={{ borderColor: 'var(--border)' }}>
+                    <p className="text-xs font-bold text-[#10B981] mb-1">02. Disqualification Traps</p>
+                    <p className="text-[12px] leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                      Pre-empt unwritten reasons why approval committees eliminate competing bids during scrutiny.
+                    </p>
+                  </div>
+                  <div className="p-3.5 rounded-xl border bg-black/5 dark:bg-white/5" style={{ borderColor: 'var(--border)' }}>
+                    <p className="text-xs font-bold text-amber-500 mb-1">03. Winning Bid Strategy</p>
+                    <p className="text-[12px] leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                      Aligning every affidavit, BOQ sheet, and technical submission with maximum scoring parameters.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="lg:col-span-4 flex flex-col items-center text-center p-6 rounded-2xl border"
+                style={{
+                  backgroundColor: 'var(--bg-subtle)',
+                  borderColor: 'rgba(13, 148, 136, 0.3)',
+                }}
+              >
+                <div className="relative mb-3">
+                  <div className="w-20 h-20 rounded-2xl border-2 overflow-hidden shadow-md" style={{ borderColor: 'var(--accent)' }}>
+                    <img src="/avatar-1.png" alt="Chief Government Tender Advisor" className="w-full h-full object-cover object-top" />
+                  </div>
+                  <span className="absolute -bottom-2 -right-2 px-2 py-0.5 rounded-md text-[10px] font-black uppercase text-white shadow-xs" style={{ background: '#0D9488' }}>
+                    18+ Yrs
+                  </span>
+                </div>
+                <h4 className="font-extrabold text-sm" style={{ color: 'var(--text-primary)' }}>
+                  Chief Tender Evaluator
+                </h4>
+                <p className="text-[11px] font-medium mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                  Ex-Govt Tender Drafter & Committee Member
+                </p>
+                <div
+                  className="mt-3 py-1.5 px-3 rounded-full text-[11px] font-bold border"
+                  style={{
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderColor: 'rgba(16, 185, 129, 0.3)',
+                    color: '#10B981',
+                  }}
+                >
+                  Zero Technical Rejections Target
+                </div>
+              </div>
+            </div>
+          </div>
+        </SectionReveal>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {differentiators.map((item, i) => {
             const Icon = item.icon

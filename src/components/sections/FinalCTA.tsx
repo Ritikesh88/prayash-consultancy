@@ -101,8 +101,21 @@ export default function FinalCTA() {
                 Or call our desk at {siteInfo.phoneDisplay || siteInfo.phone}
               </a>
 
+              {/* Insider Review Assurance */}
+              <div
+                className="inline-flex items-center justify-center gap-2 px-3.5 py-1.5 rounded-full border text-[11px] font-semibold mt-4 mb-1"
+                style={{
+                  backgroundColor: 'rgba(13, 148, 136, 0.08)',
+                  borderColor: 'rgba(13, 148, 136, 0.25)',
+                  color: 'var(--text-primary)',
+                }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
+                <span>Audited by an 18-Year Ex-Govt Tender Approver to Maximize Winning Probability</span>
+              </div>
+
               {/* Trust line */}
-              <p className="text-[11px] mt-5" style={{ color: 'var(--text-faint)' }}>
+              <p className="text-[11px] mt-3" style={{ color: 'var(--text-faint)' }}>
                 Independent consultancy. Portal credentials & private keys are never requested.
               </p>
             </div>

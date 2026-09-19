@@ -1,8 +1,10 @@
+import { ExternalLink } from 'lucide-react'
 import {
   GemLogo, CpppLogo, GepnicLogo, MstcLogo, IrepsLogo,
   StateTenderLogo, PsuPortalLogo,
 } from '@/components/ui/governmentLogos'
 import { useContent } from '@/context/ContentContext'
+import type { PortalItem } from '@/types/content'
 
 const logoLookup: Record<string, typeof GemLogo> = {
   GeM: GemLogo,
@@ -14,9 +16,27 @@ const logoLookup: Record<string, typeof GemLogo> = {
   'PSU Portals': PsuPortalLogo,
 }
 
+const defaultPortalUrls: Record<string, string> = {
+  GeM: 'https://gem.gov.in',
+  CPPP: 'https://eprocure.gov.in/eprocure/app',
+  GePNIC: 'https://gepnic.gov.in',
+  MSTC: 'https://www.mstcecommerce.com',
+  IREPS: 'https://www.ireps.gov.in',
+  'State eTenders': 'https://etenders.gov.in/eprocure/app',
+  'PSU Portals': 'https://eprocure.gov.in/cppp/',
+}
+
+function resolvePortalUrl(portal: PortalItem): string {
+  if (portal.url && portal.url.trim().length > 0) return portal.url
+  if (defaultPortalUrls[portal.name]) return defaultPortalUrls[portal.name]
+  if (portal.domain.startsWith('http')) return portal.domain
+  return `https://${portal.domain}`
+}
+
 export default function PortalTrustSection() {
   const { content } = useContent()
   const portals = content.portals || []
+
   return (
     <section
       className="py-12 border-b relative overflow-hidden"
@@ -52,15 +72,25 @@ export default function PortalTrustSection() {
           <p className="text-xs sm:text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
             End-to-end enrollment, document validation, BOQ compliance, and submission handling across India&apos;s apex digital procurement systems.
           </p>
+          <p className="text-[11px] font-semibold mt-2 flex items-center justify-center gap-1 text-[#0D9488]">
+            <span>Click any gateway card to visit the official portal in a new tab</span>
+            <ExternalLink size={11} />
+          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
           {portals.map((portal) => {
             const Logo = logoLookup[portal.name] || GemLogo
+            const targetUrl = resolvePortalUrl(portal)
+
             return (
-              <div
+              <a
                 key={portal.name}
-                className="flex flex-col justify-between p-4 rounded-2xl border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group cursor-default select-none relative overflow-hidden"
+                href={targetUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Visit official ${portal.name} portal (${portal.domain}) in a new tab`}
+                className="flex flex-col justify-between p-4 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 group cursor-pointer select-none relative overflow-hidden text-left no-underline block"
                 style={{
                   backgroundColor: 'var(--bg-card)',
                   borderColor: 'var(--border)',
@@ -72,26 +102,40 @@ export default function PortalTrustSection() {
                   style={{ backgroundColor: portal.color }}
                 />
 
-                <div className="flex items-start gap-3 mb-3">
-                  <div className="flex-shrink-0 transition-transform duration-300 group-hover:scale-110 rounded-xl overflow-hidden shadow-xs border border-white/10">
-                    <Logo size={36} />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="text-sm font-extrabold tracking-tight" style={{ color: 'var(--text-primary)' }}>
-                        {portal.name}
+                <div className="flex items-start justify-between gap-2 mb-3">
+                  <div className="flex items-start gap-3 min-w-0">
+                    <div className="flex-shrink-0 transition-transform duration-300 group-hover:scale-110 rounded-xl overflow-hidden shadow-xs border border-white/10">
+                      <Logo size={36} />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-sm font-extrabold tracking-tight group-hover:text-[#0D9488] transition-colors" style={{ color: 'var(--text-primary)' }}>
+                          {portal.name}
+                        </span>
+                      </div>
+                      <span className="text-[10px] font-mono text-xs opacity-75 truncate block" style={{ color: portal.color }}>
+                        {portal.domain}
                       </span>
                     </div>
-                    <span className="text-[10px] font-mono text-xs opacity-75 truncate block" style={{ color: portal.color }}>
-                      {portal.domain}
-                    </span>
+                  </div>
+                  <div
+                    className="p-1 rounded-md opacity-40 group-hover:opacity-100 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 flex-shrink-0"
+                    style={{ color: portal.color }}
+                    title="Opens official portal in new tab"
+                  >
+                    <ExternalLink size={13} />
                   </div>
                 </div>
 
-                <div className="mt-auto pt-2 border-t" style={{ borderColor: 'var(--border)' }}>
-                  <p className="text-[11px] font-medium line-clamp-1 mb-1" style={{ color: 'var(--text-secondary)' }}>
-                    {portal.full}
-                  </p>
+                <div className="mt-auto pt-2.5 border-t" style={{ borderColor: 'var(--border)' }}>
+                  <div className="flex items-center justify-between gap-1 mb-1.5">
+                    <p className="text-[11px] font-medium line-clamp-1 truncate" style={{ color: 'var(--text-secondary)' }}>
+                      {portal.full}
+                    </p>
+                    <span className="text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap flex items-center gap-0.5" style={{ color: portal.color }}>
+                      Visit ↗
+                    </span>
+                  </div>
                   <span
                     className="inline-block text-[9px] font-semibold px-2 py-0.5 rounded-full border"
                     style={{
@@ -103,7 +147,7 @@ export default function PortalTrustSection() {
                     {portal.status}
                   </span>
                 </div>
-              </div>
+              </a>
             )
           })}
         </div>

@@ -41,6 +41,7 @@ export interface PortalItem {
   domain: string
   color: string
   status: string
+  url?: string
 }
 
 export interface TrustBarItem {
