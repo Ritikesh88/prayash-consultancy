@@ -230,13 +230,34 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
   const importBackup = (jsonString: string) => {
     try {
       const parsed = JSON.parse(jsonString)
-      if (!parsed || typeof parsed !== 'object') {
-        return { success: false, error: 'Invalid JSON format' }
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        return { success: false, error: 'Invalid JSON configuration format.' }
       }
-      saveContent({ ...defaultCMSContent, ...parsed })
+
+      const validKeys: (keyof CMSContentState)[] = [
+        'siteInfo', 'hero', 'portals', 'trustBar', 'problemItems',
+        'services', 'workflowStages', 'whyUsItems', 'faqs', 'finalCta'
+      ]
+
+      // Verify at least some core keys match expected CMS state
+      const matchingKeys = validKeys.filter(k => k in parsed)
+      if (matchingKeys.length === 0) {
+        return { success: false, error: 'Backup does not contain valid CMS configuration data.' }
+      }
+
+      // Build sanitized content object with only whitelisted keys
+      const sanitized = { ...defaultCMSContent }
+      for (const key of validKeys) {
+        if (key in parsed && parsed[key] !== null && typeof parsed[key] === typeof defaultCMSContent[key]) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ;(sanitized as any)[key] = parsed[key]
+        }
+      }
+
+      saveContent(sanitized)
       return { success: true }
     } catch {
-      return { success: false, error: 'Invalid JSON file content' }
+      return { success: false, error: 'Corrupt or unreadable JSON file.' }
     }
   }
 

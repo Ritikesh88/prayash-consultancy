@@ -1,18 +1,19 @@
 import { useState } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import { ShieldCheck, Lock, Mail, Eye, EyeOff, ArrowLeft, KeyRound, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { ShieldCheck, Lock, Mail, Eye, EyeOff, ArrowLeft, AlertCircle, CheckCircle2, Clock, Key } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { siteConfig } from '@/config/siteConfig'
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState('admin@prayash.in')
-  const [password, setPassword] = useState('admin@prayash2026')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const { login } = useAuth()
+  const { login, initializePassword, isInitialized, lockoutRemainingSeconds } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -24,15 +25,32 @@ export default function AdminLogin() {
     setLoading(true)
 
     setTimeout(() => {
-      const result = login(password, email)
-      if (result.success) {
-        navigate(from, { replace: true })
+      if (!isInitialized) {
+        if (password !== confirmPassword) {
+          setError('Passwords do not match.')
+          setLoading(false)
+          return
+        }
+        const result = initializePassword(password, email.trim() || undefined)
+        if (result.success) {
+          navigate(from, { replace: true })
+        } else {
+          setError(result.error || 'Failed to initialize master password.')
+        }
       } else {
-        setError(result.error || 'Authentication failed. Please verify credentials.')
+        const result = login(password, email.trim() || undefined)
+        if (result.success) {
+          navigate(from, { replace: true })
+        } else {
+          setError(result.error || 'Authentication failed. Please verify credentials.')
+        }
       }
       setLoading(false)
     }, 400)
   }
+
+  const isLockedOut = lockoutRemainingSeconds > 0
+  const lockoutMins = Math.ceil(lockoutRemainingSeconds / 60)
 
   return (
     <>
@@ -93,32 +111,37 @@ export default function AdminLogin() {
                   color: 'var(--accent)',
                 }}
               >
-                <ShieldCheck size={28} />
+                {isInitialized ? <ShieldCheck size={28} /> : <Key size={28} />}
               </div>
               <h1 className="text-2xl font-extrabold tracking-tight" style={{ color: 'var(--text-primary)' }}>
-                Tender Desk Admin CMS
+                {isInitialized ? 'Tender Desk Admin CMS' : 'Set Admin Master Password'}
               </h1>
               <p className="text-xs mt-1.5" style={{ color: 'var(--text-secondary)' }}>
-                Sign in to customize homepage content, portal settings, and review client leads.
+                {isInitialized
+                  ? 'Sign in to customize homepage content, portal settings, and review client leads.'
+                  : 'Welcome! First-time setup requires defining your secure master credentials.'}
               </p>
             </div>
 
-            {/* Helper Credential Pill */}
-            <div
-              className="mb-6 p-3 rounded-xl border text-xs flex items-start gap-2.5"
-              style={{
-                backgroundColor: 'rgba(13,148,136,0.06)',
-                borderColor: 'rgba(13,148,136,0.25)',
-              }}
-            >
-              <KeyRound size={16} className="flex-shrink-0 mt-0.5 text-teal-600 dark:text-teal-400" />
-              <div>
-                <p className="font-bold text-teal-700 dark:text-teal-300">Default Staff Access:</p>
-                <p className="text-[11px] text-teal-600 dark:text-teal-400 font-mono mt-0.5">
-                  Password: <span className="font-bold underline">admin@prayash2026</span>
-                </p>
+            {/* Lockout Warning */}
+            {isLockedOut && (
+              <div
+                className="mb-5 p-3.5 rounded-xl border text-xs flex items-center gap-2.5"
+                style={{
+                  backgroundColor: 'rgba(239, 68, 68, 0.12)',
+                  borderColor: 'rgba(239, 68, 68, 0.35)',
+                  color: '#EF4444',
+                }}
+              >
+                <Clock size={16} className="flex-shrink-0 animate-pulse" />
+                <div>
+                  <p className="font-bold">Security Lockout Active</p>
+                  <p className="text-[11px] mt-0.5">
+                    Too many invalid login attempts. Please wait {lockoutMins} minute{lockoutMins > 1 ? 's' : ''} ({lockoutRemainingSeconds}s) before retrying.
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
 
             {error && (
               <div
@@ -150,20 +173,21 @@ export default function AdminLogin() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border text-sm outline-none transition-all"
+                    disabled={isLockedOut}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border text-sm outline-none transition-all disabled:opacity-50"
                     style={{
                       backgroundColor: 'var(--bg-base)',
                       borderColor: 'var(--border)',
                       color: 'var(--text-primary)',
                     }}
-                    placeholder="admin@prayash.in"
+                    placeholder="admin@prayashconsultancy.com"
                   />
                 </div>
               </div>
 
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--text-secondary)' }}>
-                  Password
+                  {isInitialized ? 'Password' : 'Create Master Password (min 10 characters, letters & numbers)'}
                 </label>
                 <div className="relative">
                   <Lock
@@ -176,13 +200,14 @@ export default function AdminLogin() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-10 py-2.5 rounded-xl border text-sm outline-none transition-all"
+                    disabled={isLockedOut}
+                    className="w-full pl-10 pr-10 py-2.5 rounded-xl border text-sm outline-none transition-all disabled:opacity-50"
                     style={{
                       backgroundColor: 'var(--bg-base)',
                       borderColor: 'var(--border)',
                       color: 'var(--text-primary)',
                     }}
-                    placeholder="••••••••••••"
+                    placeholder={isInitialized ? '••••••••••••' : 'Enter strong password'}
                   />
                   <button
                     type="button"
@@ -196,20 +221,48 @@ export default function AdminLogin() {
                 </div>
               </div>
 
+              {!isInitialized && (
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--text-secondary)' }}>
+                    Confirm Master Password
+                  </label>
+                  <div className="relative">
+                    <Lock
+                      size={16}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+                      style={{ color: 'var(--text-muted)' }}
+                    />
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border text-sm outline-none transition-all"
+                      style={{
+                        backgroundColor: 'var(--bg-base)',
+                        borderColor: 'var(--border)',
+                        color: 'var(--text-primary)',
+                      }}
+                      placeholder="Repeat password"
+                    />
+                  </div>
+                </div>
+              )}
+
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full py-3 rounded-xl font-bold text-sm text-white transition-all shadow-md mt-6 flex items-center justify-center gap-2 cursor-pointer"
+                disabled={loading || isLockedOut}
+                className="w-full py-3 rounded-xl font-bold text-sm text-white transition-all shadow-md mt-6 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ background: 'var(--accent)' }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--accent-hover)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--accent)')}
+                onMouseEnter={(e) => !isLockedOut && (e.currentTarget.style.background = 'var(--accent-hover)')}
+                onMouseLeave={(e) => !isLockedOut && (e.currentTarget.style.background = 'var(--accent)')}
               >
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <>
                     <CheckCircle2 size={16} />
-                    <span>Access Admin Panel</span>
+                    <span>{isInitialized ? 'Access Admin Panel' : 'Set Master Password & Enter'}</span>
                   </>
                 )}
               </button>

@@ -342,7 +342,7 @@ export default function AdminDashboard() {
 
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--text-secondary)' }}>
-                        New Password (min 6 characters)
+                        New Password (min 10 characters, letters & numbers)
                       </label>
                       <input
                         type="password"

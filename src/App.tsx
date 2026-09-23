@@ -125,15 +125,6 @@ function AppLayout() {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms"         element={<TermsConditions />} />
             <Route path="/client-login"  element={<ClientLogin />} />
-            <Route path="/admin/login"   element={<AdminLogin />} />
-            <Route
-              path="/admin"
-              element={
-                <AdminGuard>
-                  <AdminDashboard />
-                </AdminGuard>
-              }
-            />
             <Route path="*"              element={<NotFound />} />
           </Routes>
         </Suspense>

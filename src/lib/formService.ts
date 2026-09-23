@@ -1,14 +1,30 @@
 // ============================================================
 // FORM SERVICE
-// Abstracted form submission layer.
-// Phase 1: stores sanitized metadata to localStorage (max 5 items, 24h TTL) + console.
-// Phase 2: swap submitToSupabase() calls in below functions.
+// Form submission layer with Supabase Database & Storage,
+// Netlify Forms fallback, rate limiting, and admin sync.
 // ============================================================
 
 import type { Lead, TenderSubmission, ContactRequest } from '@/types/lead'
+import type { AdminLead } from '@/types/content'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 
-const MAX_STORED_ITEMS = 5
-const TTL_HOURS = 24
+const LEADS_STORAGE_KEY = 'prayash_admin_leads_v1'
+const LAST_SUBMIT_KEY = 'prayash_last_submit_ts'
+const MIN_SUBMISSION_INTERVAL_MS = 15000 // 15 seconds cooldown
+
+// Rate limiting check
+function checkRateLimit(): void {
+  if (typeof window === 'undefined') return
+  const lastTs = sessionStorage.getItem(LAST_SUBMIT_KEY)
+  if (lastTs) {
+    const elapsed = Date.now() - Number(lastTs)
+    if (elapsed < MIN_SUBMISSION_INTERVAL_MS) {
+      const waitSecs = Math.ceil((MIN_SUBMISSION_INTERVAL_MS - elapsed) / 1000)
+      throw new Error(`Please wait ${waitSecs} second(s) before sending another submission.`)
+    }
+  }
+  sessionStorage.setItem(LAST_SUBMIT_KEY, String(Date.now()))
+}
 
 // Utility: get UTM parameters from URL
 function getUtmParams() {
@@ -21,59 +37,67 @@ function getUtmParams() {
   }
 }
 
-// Utility: mask sensitive phone number for client-side storage
-function maskPhone(phone?: string): string | undefined {
-  if (!phone || phone.length < 6) return phone
-  return `${phone.slice(0, 4)}****${phone.slice(-2)}`
-}
-
-// Utility: mask email for client-side storage
-function maskEmail(email?: string): string | undefined {
-  if (!email || !email.includes('@')) return email
-  const [user, domain] = email.split('@')
-  return `${user.slice(0, 2)}***@${domain}`
-}
-
-interface StoredEntry {
-  data: unknown
-  savedAt: string
-}
-
-// Utility: save sanitized record to localStorage with TTL eviction and bounded size
-function saveToLocalStorage(key: string, data: Record<string, unknown>) {
+// Dispatch to Netlify Forms endpoint (fallback / dual delivery)
+async function postToNetlify(formName: string, data: Record<string, string | undefined>): Promise<void> {
   if (typeof window === 'undefined') return
   try {
-    const raw = localStorage.getItem(key)
-    const existing: StoredEntry[] = raw ? JSON.parse(raw) : []
-
-    const now = Date.now()
-    const cutoff = now - TTL_HOURS * 60 * 60 * 1000
-
-    // Filter out expired items
-    const valid = existing.filter((item) => {
-      const ts = new Date(item.savedAt).getTime()
-      return !isNaN(ts) && ts > cutoff
+    const filtered: Record<string, string> = { 'form-name': formName }
+    for (const [key, val] of Object.entries(data)) {
+      if (val !== undefined && val !== null) {
+        filtered[key] = String(val)
+      }
+    }
+    const encodedBody = new URLSearchParams(filtered).toString()
+    await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encodedBody,
     })
-
-    // Mask PII before writing to client localStorage
-    const sanitized = { ...data }
-    if (typeof sanitized.mobile === 'string') sanitized.mobile = maskPhone(sanitized.mobile)
-    if (typeof sanitized.phone === 'string') sanitized.phone = maskPhone(sanitized.phone)
-    if (typeof sanitized.email === 'string') sanitized.email = maskEmail(sanitized.email)
-
-    valid.push({ data: sanitized, savedAt: new Date().toISOString() })
-
-    // Keep only most recent entries (FIFO)
-    const trimmed = valid.slice(-MAX_STORED_ITEMS)
-    localStorage.setItem(key, JSON.stringify(trimmed))
-  } catch {
-    // Fail silently — localStorage may be disabled or in private browsing
+  } catch (err) {
+    if (import.meta.env.DEV) {
+      console.warn('[FormService] Netlify form dispatch notice:', err)
+    }
   }
 }
 
-// Simulate async network submission for realistic UX
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
+// Upload file to Supabase Storage if configured
+async function uploadTenderFileToSupabase(file: File): Promise<string | null> {
+  if (!supabase || !isSupabaseConfigured) return null
+  try {
+    const cleanFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
+    const filePath = `tenders/${Date.now()}_${cleanFileName}`
+
+    const { error: uploadError } = await supabase.storage
+      .from('tender-documents')
+      .upload(filePath, file, { cacheControl: '3600', upsert: false })
+
+    if (uploadError) {
+      console.warn('[FormService] Supabase storage upload notice:', uploadError.message)
+      return null
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from('tender-documents')
+      .getPublicUrl(filePath)
+
+    return publicUrlData.publicUrl || filePath
+  } catch (err) {
+    console.warn('[FormService] Storage upload exception:', err)
+    return null
+  }
+}
+
+// Sync to local Admin Leads store so admin panel immediately displays submitted leads
+function syncToAdminLeads(lead: AdminLead) {
+  if (typeof window === 'undefined') return
+  try {
+    const raw = localStorage.getItem(LEADS_STORAGE_KEY)
+    const existing: AdminLead[] = raw ? JSON.parse(raw) : []
+    const updated = [lead, ...existing].slice(0, 100) // Keep latest 100
+    localStorage.setItem(LEADS_STORAGE_KEY, JSON.stringify(updated))
+  } catch {
+    // Silently continue
+  }
 }
 
 // ============================================================
@@ -81,79 +105,217 @@ function delay(ms: number) {
 // ============================================================
 
 /**
- * Submit a consultation lead.
- * Replace the body of this function with a Supabase insert when ready.
+ * Submit a general consultation lead.
  */
 export async function submitLead(data: Omit<Lead, 'id' | 'status' | 'createdAt'>): Promise<void> {
-  await delay(800) // Simulate network
+  checkRateLimit()
 
-  const lead: Lead = {
-    ...data,
-    ...getUtmParams(),
-    source: typeof document !== 'undefined' ? document.referrer || 'direct' : 'direct',
-    status: 'NEW',
-    createdAt: new Date().toISOString(),
+  const leadId = `lead_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`
+  const now = new Date().toISOString()
+  const utm = getUtmParams()
+
+  // 1. Insert into Supabase if configured
+  if (supabase && isSupabaseConfigured) {
+    const { error } = await supabase.from('leads').insert({
+      type: 'quick_callback',
+      name: data.name,
+      company_name: data.companyName || null,
+      mobile: data.mobile,
+      email: data.email || null,
+      requirement_type: data.requirementType || null,
+      tender_number: data.tenderNumber || null,
+      message: data.message || null,
+      utm_source: utm.utmSource || null,
+      utm_medium: utm.utmMedium || null,
+      utm_campaign: utm.utmCampaign || null,
+      status: 'new',
+    })
+
+    if (error) {
+      console.error('[FormService] Supabase insert error:', error.message)
+    }
   }
 
-  // Phase 1: bounded, sanitized localStorage
-  saveToLocalStorage('prayash_leads', lead as unknown as Record<string, unknown>)
+  // 2. Dual dispatch to Netlify Forms
+  await postToNetlify('contact', {
+    name: data.name,
+    companyName: data.companyName,
+    phone: data.mobile,
+    email: data.email,
+    requirementType: data.requirementType,
+    tenderNumber: data.tenderNumber,
+    message: data.message,
+    ...utm,
+  })
+
+  // 3. Sync to Admin Desk Leads
+  syncToAdminLeads({
+    id: leadId,
+    type: 'quick_callback',
+    name: data.name,
+    companyName: data.companyName,
+    mobile: data.mobile,
+    email: data.email,
+    tenderNumber: data.tenderNumber,
+    message: data.message,
+    status: 'new',
+    createdAt: now,
+  })
+
   if (import.meta.env.DEV) {
-    console.log('[FormService] Lead submitted:', lead)
+    console.log('[FormService] Lead submitted successfully:', data)
   }
-
-  // Phase 2: Configure Supabase
-  // const { error } = await supabase.from('leads').insert(lead)
-  // if (error) throw error
 }
 
 /**
- * Submit a tender for review.
- * Note: file upload not persisted in Phase 1 — log metadata only.
+ * Submit a tender document / bid review request.
  */
 export async function submitTender(
-  data: Omit<TenderSubmission, 'id' | 'status' | 'createdAt'>
+  data: Omit<TenderSubmission, 'id' | 'status' | 'createdAt'> & { botField?: string }
 ): Promise<void> {
-  await delay(1000) // Slightly longer for file upload simulation
-
-  const submission: TenderSubmission = {
-    ...data,
-    ...getUtmParams(),
-    source: typeof document !== 'undefined' ? document.referrer || 'direct' : 'direct',
-    tenderFileName: data.tenderFile?.name,
-    tenderFile: undefined, // Don't serialize File object
-    status: 'NEW',
-    createdAt: new Date().toISOString(),
+  // Silent drop for bot submissions
+  if (data.botField) {
+    return
   }
 
-  saveToLocalStorage('prayash_tender_submissions', submission as unknown as Record<string, unknown>)
+  checkRateLimit()
+
+  const leadId = `tnd_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`
+  const now = new Date().toISOString()
+  const utm = getUtmParams()
+
+  // Upload file to Supabase Storage if file attached
+  let uploadedFileUrl: string | null = null
+  if (data.tenderFile) {
+    uploadedFileUrl = await uploadTenderFileToSupabase(data.tenderFile)
+  }
+
+  // 1. Insert into Supabase if configured
+  if (supabase && isSupabaseConfigured) {
+    const { error } = await supabase.from('leads').insert({
+      type: 'tender_submission',
+      name: data.name,
+      company_name: data.companyName,
+      mobile: data.mobile,
+      email: data.email || null,
+      tender_number: data.tenderNumber || null,
+      tender_authority: data.tenderAuthority || null,
+      message: data.message || null,
+      preferred_contact: data.preferredContact || null,
+      file_name: data.tenderFile?.name || null,
+      file_url: uploadedFileUrl,
+      utm_source: utm.utmSource || null,
+      utm_medium: utm.utmMedium || null,
+      utm_campaign: utm.utmCampaign || null,
+      status: 'new',
+    })
+
+    if (error) {
+      console.error('[FormService] Supabase insert error:', error.message)
+    }
+  }
+
+  // 2. Dual dispatch to Netlify Forms
+  await postToNetlify('tender-review', {
+    name: data.name,
+    companyName: data.companyName,
+    mobile: data.mobile,
+    email: data.email,
+    tenderNumber: data.tenderNumber,
+    tenderAuthority: data.tenderAuthority,
+    message: data.message,
+    preferredContact: data.preferredContact,
+    fileName: data.tenderFile?.name,
+    ...utm,
+  })
+
+  // 3. Sync to Admin Desk Leads
+  syncToAdminLeads({
+    id: leadId,
+    type: 'tender_submission',
+    name: data.name,
+    companyName: data.companyName,
+    mobile: data.mobile,
+    email: data.email,
+    tenderNumber: data.tenderNumber,
+    tenderAuthority: data.tenderAuthority,
+    message: data.message,
+    fileName: data.tenderFile?.name,
+    status: 'new',
+    createdAt: now,
+  })
+
   if (import.meta.env.DEV) {
-    console.log('[FormService] Tender submitted:', submission)
+    console.log('[FormService] Tender review submitted successfully:', data)
   }
-
-  // Phase 2: Upload file to Supabase Storage + insert record
-  // const fileUrl = await uploadToSupabaseStorage(data.tenderFile)
-  // const { error } = await supabase.from('tender_submissions').insert({ ...submission, fileUrl })
-  // if (error) throw error
 }
 
 /**
  * Submit a contact / callback request.
  */
-export async function submitContact(data: Omit<ContactRequest, 'id' | 'createdAt'>): Promise<void> {
-  await delay(800)
-
-  const request: ContactRequest = {
-    ...data,
-    source: typeof document !== 'undefined' ? document.referrer || 'direct' : 'direct',
-    createdAt: new Date().toISOString(),
+export async function submitContact(
+  data: Omit<ContactRequest, 'id' | 'createdAt'> & { botField?: string }
+): Promise<void> {
+  // Silent drop for bot submissions
+  if (data.botField) {
+    return
   }
 
-  saveToLocalStorage('prayash_contact_requests', request as unknown as Record<string, unknown>)
+  checkRateLimit()
+
+  const leadId = `cnt_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`
+  const now = new Date().toISOString()
+  const utm = getUtmParams()
+
+  // 1. Insert into Supabase if configured
+  if (supabase && isSupabaseConfigured) {
+    const { error } = await supabase.from('leads').insert({
+      type: 'contact_request',
+      name: data.name,
+      company_name: data.companyName || null,
+      mobile: data.phone,
+      email: data.email || null,
+      requirement_type: data.requirementType || null,
+      tender_number: data.tenderNumber || null,
+      message: data.message || null,
+      utm_source: utm.utmSource || null,
+      utm_medium: utm.utmMedium || null,
+      utm_campaign: utm.utmCampaign || null,
+      status: 'new',
+    })
+
+    if (error) {
+      console.error('[FormService] Supabase insert error:', error.message)
+    }
+  }
+
+  // 2. Dual dispatch to Netlify Forms
+  await postToNetlify('contact', {
+    name: data.name,
+    companyName: data.companyName,
+    phone: data.phone,
+    email: data.email,
+    requirementType: data.requirementType,
+    tenderNumber: data.tenderNumber,
+    message: data.message,
+    ...utm,
+  })
+
+  // 3. Sync to Admin Desk Leads
+  syncToAdminLeads({
+    id: leadId,
+    type: 'contact_request',
+    name: data.name,
+    companyName: data.companyName,
+    mobile: data.phone,
+    email: data.email,
+    tenderNumber: data.tenderNumber,
+    message: data.message,
+    status: 'new',
+    createdAt: now,
+  })
+
   if (import.meta.env.DEV) {
-    console.log('[FormService] Contact request submitted:', request)
+    console.log('[FormService] Contact request submitted successfully:', data)
   }
-
-  // Phase 2:
-  // const { error } = await supabase.from('contact_requests').insert(request)
-  // if (error) throw error
 }

@@ -38,6 +38,7 @@ interface SendTenderSectionProps {
 
 export default function SendTenderSection({ compact = false }: SendTenderSectionProps) {
   const [formState, setFormState] = useState<FormState>('idle')
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
   const [fileError, setFileError] = useState<string>('')
   const [dragOver, setDragOver] = useState(false)
@@ -99,6 +100,7 @@ export default function SendTenderSection({ compact = false }: SendTenderSection
 
   const onSubmit = async (data: FormData) => {
     setFormState('loading')
+    setErrorMessage('')
     try {
       const submission: Omit<TenderSubmission, 'id' | 'status' | 'createdAt'> = {
         ...data,
@@ -110,8 +112,11 @@ export default function SendTenderSection({ compact = false }: SendTenderSection
       setFormState('success')
       reset()
       setUploadedFile(null)
-    } catch {
+    } catch (err: unknown) {
       setFormState('error')
+      if (err instanceof Error) {
+        setErrorMessage(err.message)
+      }
     }
   }
 
@@ -202,6 +207,8 @@ export default function SendTenderSection({ compact = false }: SendTenderSection
           }}
         >
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            {/* Honeypot field for bot filtering */}
+            <input type="text" name="bot-field" className="sr-only hidden" tabIndex={-1} autoComplete="off" />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               {/* Name */}
               <div className="form-field">
@@ -462,9 +469,9 @@ export default function SendTenderSection({ compact = false }: SendTenderSection
             </button>
 
             {formState === 'error' && (
-              <p className="form-error justify-center mt-3">
-                <AlertCircle size={14} />
-                Unable to submit. Please retry or contact us on WhatsApp directly.
+              <p className="form-error justify-center mt-3 text-center">
+                <AlertCircle size={14} className="flex-shrink-0" />
+                <span>{errorMessage || 'Unable to submit. Please retry or contact us on WhatsApp directly.'}</span>
               </p>
             )}
 

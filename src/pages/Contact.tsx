@@ -31,6 +31,7 @@ type FormData = z.infer<typeof schema>
 
 export default function Contact() {
   const [formState, setFormState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const hasStartedRef = useRef(false)
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
@@ -46,6 +47,7 @@ export default function Contact() {
 
   const onSubmit = async (data: FormData) => {
     setFormState('loading')
+    setErrorMessage('')
     try {
       const request: Omit<ContactRequest, 'id' | 'createdAt'> = {
         ...data,
@@ -56,8 +58,11 @@ export default function Contact() {
       trackEvent(EVENTS.CONTACT_FORM_SUBMIT)
       setFormState('success')
       reset()
-    } catch {
+    } catch (err: unknown) {
       setFormState('error')
+      if (err instanceof Error) {
+        setErrorMessage(err.message)
+      }
     }
   }
 
@@ -256,6 +261,8 @@ export default function Contact() {
                     </p>
 
                     <form onSubmit={handleSubmit(onSubmit)} noValidate>
+                      {/* Honeypot field for bot filtering */}
+                      <input type="text" name="bot-field" className="sr-only hidden" tabIndex={-1} autoComplete="off" />
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                         <div className="form-field">
                           <label className="form-label" htmlFor="contact-name">
@@ -388,9 +395,9 @@ export default function Contact() {
                       </button>
 
                       {formState === 'error' && (
-                        <p className="form-error justify-center mt-3">
-                          <AlertCircle size={14} />
-                          Something went wrong. Please try again or reach us on WhatsApp.
+                        <p className="form-error justify-center mt-3 text-center">
+                          <AlertCircle size={14} className="flex-shrink-0" />
+                          <span>{errorMessage || 'Something went wrong. Please try again or reach us on WhatsApp.'}</span>
                         </p>
                       )}
                     </form>
