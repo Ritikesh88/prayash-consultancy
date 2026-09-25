@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { X, Phone, MessageCircle, ChevronRight } from 'lucide-react'
 import { siteConfig, whatsappUrl } from '@/config/siteConfig'
 import { trackEvent, EVENTS } from '@/lib/analytics'
@@ -11,6 +12,8 @@ interface MobileNavProps {
 }
 
 export default function MobileNav({ isOpen, onClose, navLinks }: MobileNavProps) {
+  const shouldReduceMotion = useReducedMotion()
+
   // Lock body scroll when open
   useEffect(() => {
     if (isOpen) {
@@ -22,48 +25,83 @@ export default function MobileNav({ isOpen, onClose, navLinks }: MobileNavProps)
   }, [isOpen])
 
   return (
-    <>
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 z-40 transition-all duration-300 lg:hidden"
-        style={{
-          background: 'rgba(0,0,0,0.5)',
-          backdropFilter: 'blur(4px)',
-          opacity: isOpen ? 1 : 0,
-          pointerEvents: isOpen ? 'auto' : 'none',
-        }}
-        onClick={onClose}
-      />
-
-      {/* Drawer */}
-      <nav
-        className="fixed top-0 right-0 bottom-0 w-[280px] z-50 flex flex-col lg:hidden transition-transform duration-300"
-        style={{
-          background: 'var(--bg-surface)',
-          borderLeft: '1px solid var(--border)',
-          transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
-          boxShadow: '-16px 0 48px rgba(0,0,0,0.3)',
-        }}
-        aria-hidden={!isOpen}
-        aria-label="Mobile navigation"
-      >
-        {/* Header */}
-        <div
-          className="flex items-center justify-between px-5 py-4 border-b"
-          style={{ borderColor: 'var(--border)' }}
-        >
-          <span className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>
-            {siteConfig.companyName}
-          </span>
-          <button
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop with spring crossfade */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 lg:hidden"
+            style={{
+              background: 'rgba(0,0,0,0.5)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+            }}
             onClick={onClose}
-            aria-label="Close navigation"
-            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-            style={{ color: 'var(--text-muted)' }}
+          />
+
+          {/* Apple Fluid Gesture Sheet: 1:1 Direct Manipulation with Spring Momentum */}
+          <motion.nav
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={{ left: 0.05, right: 0.6 }}
+            onDragEnd={(_, info) => {
+              // Velocity handoff & threshold check: close if dragged right with intent or momentum
+              if (info.offset.x > 80 || info.velocity.x > 300) {
+                onClose()
+              }
+            }}
+            transition={
+              shouldReduceMotion
+                ? { duration: 0.2 }
+                : {
+                    type: 'spring',
+                    stiffness: 300,
+                    damping: 30, // critically damped (damping ≈ 1.0)
+                    mass: 0.85,
+                  }
+            }
+            className="fixed top-0 right-0 bottom-0 w-[285px] max-w-[85vw] z-50 flex flex-col lg:hidden touch-pan-y"
+            style={{
+              background: 'var(--bg-surface)',
+              borderLeft: '1px solid var(--border)',
+              boxShadow: '-16px 0 48px rgba(0,0,0,0.3)',
+            }}
+            aria-modal="true"
+            role="dialog"
+            aria-label="Mobile navigation"
           >
-            <X size={18} />
-          </button>
-        </div>
+            {/* Header */}
+            <div
+              className="flex items-center justify-between px-5 py-4 border-b"
+              style={{ borderColor: 'var(--border)' }}
+            >
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-6 h-6 rounded-md flex items-center justify-center text-white text-xs font-bold"
+                  style={{ background: 'linear-gradient(135deg, #0D9488, #0891B2)' }}
+                >
+                  P
+                </div>
+                <span className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>
+                  {siteConfig.companyName}
+                </span>
+              </div>
+              <button
+                onClick={onClose}
+                aria-label="Close navigation"
+                className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors active:scale-95"
+                style={{ color: 'var(--text-muted)' }}
+              >
+                <X size={18} />
+              </button>
+            </div>
 
         {/* Nav links */}
         <div className="flex-1 overflow-y-auto py-4 px-3">
@@ -155,7 +193,9 @@ export default function MobileNav({ isOpen, onClose, navLinks }: MobileNavProps)
             </a>
           </div>
         </div>
-      </nav>
+      </motion.nav>
     </>
-  )
+  )}
+</AnimatePresence>
+)
 }

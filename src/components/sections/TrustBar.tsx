@@ -1,4 +1,5 @@
 import { useContent } from '@/context/ContentContext'
+import SectionReveal from '@/components/ui/SectionReveal'
 
 const icons = [
   ({ className }: { className?: string }) => (
@@ -47,27 +48,29 @@ export default function TrustBar() {
           {values.map((item, i) => {
             const Icon = icons[i]
             return (
-              <div key={item.title} className="flex flex-col gap-2.5">
-                <div className="flex items-center gap-2.5 lg:flex-col lg:items-start">
-                  <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{
-                      backgroundColor: `${item.color}15`,
-                      border: `1px solid ${item.color}30`,
-                    }}
-                  >
-                    <div style={{ color: item.color }}>
-                      <Icon className="w-4 h-4" />
+              <SectionReveal key={item.title} delay={i * 40} direction="up">
+                <div className="flex flex-col gap-2.5">
+                  <div className="flex items-center gap-2.5 lg:flex-col lg:items-start">
+                    <div
+                      className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{
+                        backgroundColor: `${item.color}15`,
+                        border: `1px solid ${item.color}30`,
+                      }}
+                    >
+                      <div style={{ color: item.color }}>
+                        <Icon className="w-4 h-4" />
+                      </div>
                     </div>
+                    <p className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>
+                      {item.title}
+                    </p>
                   </div>
-                  <p className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>
-                    {item.title}
+                  <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                    {item.desc}
                   </p>
                 </div>
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                  {item.desc}
-                </p>
-              </div>
+              </SectionReveal>
             )
           })}
         </div>

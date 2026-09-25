@@ -41,8 +41,8 @@
     --shadow-card:   0 4px 24px rgba(0,0,0,0.4);
     --shadow-accent: 0 8px 32px rgba(13, 148, 136, 0.20);
 
-    /* Header */
-    --header-bg: rgba(8, 14, 29, 0.95);
+    /* Header Frosted Glass (Apple translucency) */
+    --header-bg: rgba(8, 14, 29, 0.78);
   }
 
   /* ── LIGHT THEME ── */
@@ -77,7 +77,7 @@
     --shadow-card:   0 2px 16px rgba(0,0,0,0.08);
     --shadow-accent: 0 8px 32px rgba(13, 148, 136, 0.15);
 
-    --header-bg: rgba(255, 255, 255, 0.95);
+    --header-bg: rgba(255, 255, 255, 0.82);
   }
 
   /* ── GLOBAL RESET ── */
@@ -96,16 +96,27 @@
   body {
     background-color: var(--bg-base);
     color: var(--text-primary);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", system-ui, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     line-height: 1.6;
     transition: background-color 0.25s ease, color 0.25s ease;
+    text-rendering: optimizeLegibility;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    line-height: 1.2;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, sans-serif;
+    line-height: 1.12;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.032em;
     color: var(--text-primary);
+  }
+
+  /* Apple Display scale */
+  .display-title {
+    font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    font-weight: 800;
   }
 
   a {
@@ -168,19 +179,25 @@
     .container-main { padding-left: 3rem; padding-right: 3rem; }
   }
 
-  /* Card */
+  /* Card (Apple Hardware-inspired elevated slab) */
   .card {
     background-color: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-    box-shadow: var(--shadow-card);
+    border-radius: 18px;
+    padding: 1.75rem;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .card:hover {
     border-color: var(--accent);
-    box-shadow: var(--shadow-accent);
-    transform: translateY(-2px);
+    box-shadow: 0 14px 34px -4px rgba(13, 148, 136, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px) scale(1.008);
+  }
+  .card:active {
+    transform: translateY(0) scale(0.985);
+    transition: transform 70ms cubic-bezier(0, 0, 0.2, 1);
   }
 
   /* Forms */
@@ -341,7 +358,16 @@
   }
 
   button, a {
-    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease, box-shadow 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Apple Direct Response: Instant tactile depression on pointer-down */
+  button:active, 
+  a.btn:active, 
+  [role="button"]:active {
+    transform: scale(0.972);
+    transition: transform 70ms cubic-bezier(0, 0, 0.2, 1);
   }
 
   /* Accessibility: Prefers reduced motion */

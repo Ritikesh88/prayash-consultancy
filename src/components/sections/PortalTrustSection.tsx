@@ -1,4 +1,5 @@
 import { ExternalLink } from 'lucide-react'
+import { motion, useReducedMotion } from 'framer-motion'
 import {
   GemLogo, CpppLogo, GepnicLogo, MstcLogo, IrepsLogo,
   StateTenderLogo, PsuPortalLogo,
@@ -36,6 +37,7 @@ function resolvePortalUrl(portal: PortalItem): string {
 export default function PortalTrustSection() {
   const { content } = useContent()
   const portals = content.portals || []
+  const shouldReduceMotion = useReducedMotion()
 
   return (
     <section
@@ -79,18 +81,52 @@ export default function PortalTrustSection() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
-          {portals.map((portal) => {
+          {portals.map((portal, index) => {
             const Logo = logoLookup[portal.name] || GemLogo
             const targetUrl = resolvePortalUrl(portal)
 
+            // Apple fluid motion spring animation: cards fly in smoothly from the left with subtle 3D depth
+            // Configured with once: false so it repeats whenever scrolled into the visible frame
+            const cardVariants = {
+              hidden: shouldReduceMotion
+                ? { opacity: 0 }
+                : { opacity: 0, x: -55, rotateY: 10, scale: 0.96, transformPerspective: 900 },
+              visible: shouldReduceMotion
+                ? { opacity: 1, transition: { duration: 0.3, delay: index * 0.04 } }
+                : {
+                    opacity: 1,
+                    x: 0,
+                    rotateY: 0,
+                    scale: 1,
+                    transformPerspective: 900,
+                    transition: {
+                      type: 'spring' as const,
+                      stiffness: 170,
+                      damping: 24, // Critically damped
+                      mass: 0.85,
+                      delay: index * 0.065, // Apple-style organic stagger
+                    },
+                  },
+            }
+
+            const cardMotionProps = {
+              initial: 'hidden',
+              whileInView: 'visible',
+              viewport: { once: false, amount: 0.25, margin: '0px 0px -40px 0px' },
+              variants: cardVariants,
+            }
+
             return (
-              <a
+              <motion.a
                 key={portal.name}
                 href={targetUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Visit official ${portal.name} portal (${portal.domain}) in a new tab`}
-                className="flex flex-col justify-between p-4 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 group cursor-pointer select-none relative overflow-hidden text-left no-underline block"
+                {...cardMotionProps}
+                whileHover={shouldReduceMotion ? undefined : { y: -6, transition: { type: 'spring', stiffness: 350, damping: 25 } }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.98, transition: { duration: 0.1 } }}
+                className="flex flex-col justify-between p-4 rounded-2xl border transition-[border-color,box-shadow] duration-300 hover:shadow-xl group cursor-pointer select-none relative overflow-hidden text-left no-underline block"
                 style={{
                   backgroundColor: 'var(--bg-card)',
                   borderColor: 'var(--border)',
@@ -147,7 +183,7 @@ export default function PortalTrustSection() {
                     {portal.status}
                   </span>
                 </div>
-              </a>
+              </motion.a>
             )
           })}
         </div>

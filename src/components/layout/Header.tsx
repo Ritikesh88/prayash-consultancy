@@ -33,13 +33,15 @@ export default function Header() {
   return (
     <>
       <header
-        className="relative transition-all duration-300"
+        className="sticky top-0 z-40 transition-all duration-300"
         style={{
           paddingTop: scrolled ? '0.625rem' : '0.875rem',
           paddingBottom: scrolled ? '0.625rem' : '0.875rem',
           background: 'var(--header-bg)',
-          backdropFilter: 'blur(16px)',
+          backdropFilter: 'blur(20px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
           borderBottom: '1px solid var(--border)',
+          boxShadow: scrolled ? '0 10px 30px -10px rgba(0,0,0,0.15)' : 'none',
         }}
       >
         <div className="container-main flex items-center justify-between">

@@ -53,7 +53,7 @@ export default function BidReadiness() {
       <div className="container-main relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left copy */}
-          <SectionReveal>
+          <SectionReveal direction="left">
             <div>
               <div className="tag tag-accent mb-5 w-fit">Interactive Diagnostic</div>
               <h2 className="text-3xl sm:text-4xl font-bold mb-4 tracking-tight" style={{ color: 'var(--text-primary)' }}>
@@ -86,7 +86,7 @@ export default function BidReadiness() {
           </SectionReveal>
 
           {/* Right — Interactive checklist card */}
-          <SectionReveal delay={120}>
+          <SectionReveal delay={100} direction="right">
             <div
               className="rounded-2xl border p-6 sm:p-7 shadow-lg"
               style={{

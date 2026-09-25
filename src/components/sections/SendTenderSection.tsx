@@ -6,6 +6,7 @@ import { Upload, CheckCircle2, AlertCircle, Loader2, MessageCircle, FileCheck } 
 import { submitTender } from '@/lib/formService'
 import { trackEvent, EVENTS } from '@/lib/analytics'
 import { whatsappUrl } from '@/config/siteConfig'
+import SectionReveal from '@/components/ui/SectionReveal'
 import type { TenderSubmission } from '@/types/lead'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
@@ -188,24 +189,27 @@ export default function SendTenderSection({ compact = false }: SendTenderSection
       )}
       <div className={compact ? '' : 'container-main max-w-3xl mx-auto relative z-10'}>
         {!compact && (
-          <div className="text-center mb-10">
-            <div className="tag tag-accent mb-4 mx-auto w-fit">Direct Assessment</div>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-3 tracking-tight" style={{ color: 'var(--text-primary)' }}>
-              Found a tender? <span className="gradient-text">Send it for review.</span>
-            </h2>
-            <p className="max-w-lg mx-auto text-sm" style={{ color: 'var(--text-secondary)' }}>
-              Share the tender document or bid number with our desk. We'll examine the qualification criteria and explain exact requirements.
-            </p>
-          </div>
+          <SectionReveal direction="down">
+            <div className="text-center mb-10">
+              <div className="tag tag-accent mb-4 mx-auto w-fit">Direct Assessment</div>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-3 tracking-tight" style={{ color: 'var(--text-primary)' }}>
+                Found a tender? <span className="gradient-text">Send it for review.</span>
+              </h2>
+              <p className="max-w-lg mx-auto text-sm" style={{ color: 'var(--text-secondary)' }}>
+                Share the tender document or bid number with our desk. We'll examine the qualification criteria and explain exact requirements.
+              </p>
+            </div>
+          </SectionReveal>
         )}
 
-        <div
-          className="rounded-2xl border p-6 sm:p-10 shadow-lg"
-          style={{
-            background: 'var(--bg-card)',
-            borderColor: 'var(--border)',
-          }}
-        >
+        <SectionReveal direction="morph" delay={120}>
+          <div
+            className="rounded-2xl border p-6 sm:p-10 shadow-lg"
+            style={{
+              background: 'var(--bg-card)',
+              borderColor: 'var(--border)',
+            }}
+          >
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             {/* Honeypot field for bot filtering */}
             <input type="text" name="bot-field" className="sr-only hidden" tabIndex={-1} autoComplete="off" />
@@ -480,6 +484,7 @@ export default function SendTenderSection({ compact = false }: SendTenderSection
             </p>
           </form>
         </div>
+        </SectionReveal>
       </div>
     </section>
   )

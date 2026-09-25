@@ -46,8 +46,10 @@ export default function ServiceGrid() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {servicesData.map((service, i) => {
             const Icon = iconMap[service.icon] ?? FileText
+            // Alternate fly-in paths: left, morph/up, right for dynamic 3D staging
+            const direction = i % 3 === 0 ? 'left' : i % 3 === 1 ? 'morph' : 'right'
             return (
-              <SectionReveal key={service.id} delay={i * 70}>
+              <SectionReveal key={service.id} delay={i * 60} direction={direction}>
                 <div
                   id={`service-${service.id}`}
                   className="card group flex flex-col h-full shadow-sm"

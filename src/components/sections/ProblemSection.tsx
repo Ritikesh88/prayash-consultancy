@@ -17,7 +17,7 @@ export default function ProblemSection() {
       />
       <div className="container-main relative z-10">
         {/* Section Header */}
-        <SectionReveal>
+        <SectionReveal direction="down">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <div className="tag tag-amber mb-4 mx-auto w-fit">
               <AlertTriangle size={12} className="text-amber-500" />
@@ -36,7 +36,7 @@ export default function ProblemSection() {
         </SectionReveal>
 
         {/* Comparative Matrix */}
-        <SectionReveal delay={100}>
+        <SectionReveal delay={100} direction="morph">
           <div
             className="rounded-3xl border overflow-hidden shadow-xl"
             style={{

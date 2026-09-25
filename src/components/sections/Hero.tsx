@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import {
   ArrowRight, MessageCircle, CheckCircle2, Shield,
-  Clock, UploadCloud, ChevronRight, Check,
+  Clock, ChevronRight, Check,
+  Landmark, ShieldCheck, FileSearch, TrendingUp,
 } from 'lucide-react'
 import { trackEvent, EVENTS } from '@/lib/analytics'
 import SectionReveal from '@/components/ui/SectionReveal'
@@ -128,165 +130,242 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* ── 18-Year Ex-Govt Tender Evaluator Authority Card ── */}
+            {/* ── Chief Consultant / Ex-Govt Tender Evaluator Authority Card (matching provided design) ── */}
             <div
-              className="p-4 sm:p-4.5 rounded-2xl border mb-8 relative overflow-hidden transition-all duration-300 shadow-sm"
+              className="p-5 sm:p-6 rounded-2xl border mb-6 relative overflow-hidden transition-all duration-300 shadow-sm"
               style={{
                 backgroundColor: 'var(--bg-card)',
-                borderColor: 'rgba(13, 148, 136, 0.35)',
-                boxShadow: '0 4px 20px -2px rgba(13, 148, 136, 0.08)',
+                borderColor: 'rgba(13, 148, 136, 0.28)',
+                boxShadow: '0 4px 24px -2px rgba(13, 148, 136, 0.08)',
               }}
             >
-              <div
-                className="absolute -right-10 -top-10 w-28 h-28 rounded-full blur-2xl opacity-20 pointer-events-none"
-                style={{ background: '#0D9488' }}
-              />
-
-              <div className="flex items-start sm:items-center gap-3.5 relative z-10">
+              {/* Header row with Avatar + Tags + Title */}
+              <div className="flex items-start gap-4 mb-4">
                 <div className="relative flex-shrink-0">
                   <div
-                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl border-2 overflow-hidden shadow-md"
+                    className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border-2 overflow-hidden shadow-md"
                     style={{ borderColor: 'var(--accent)' }}
                   >
                     <img
                       src="/avatar-1.png"
-                      alt="18-Year Government Tender Evaluator"
+                      alt="Chief Consultant - Ex-Government Tender Expert & Committee Approver"
                       className="w-full h-full object-cover object-top"
                     />
                   </div>
                   <span
-                    className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase text-white shadow-xs"
+                    className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full text-[9px] font-black uppercase text-white shadow-xs whitespace-nowrap"
                     style={{ background: '#0D9488' }}
                   >
                     18+ Yrs
                   </span>
                 </div>
 
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2.5 flex-wrap mb-1">
                     <span
-                      className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border"
+                      className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full border"
                       style={{
                         backgroundColor: 'rgba(13, 148, 136, 0.1)',
                         borderColor: 'rgba(13, 148, 136, 0.3)',
                         color: 'var(--accent)',
                       }}
                     >
-                      ★ Ex-Govt Insider Advantage
+                      ★ EX-GOVT INSIDER ADVANTAGE
                     </span>
-                    <span className="text-[11px] font-semibold text-emerald-500 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      18 Years in Govt Tenders Only
+                    <span className="text-gray-300 dark:text-neutral-700 hidden sm:inline">|</span>
+                    <span className="text-[11px] font-semibold" style={{ color: 'var(--accent)' }}>
+                      18+ Years in Govt Tenders Only
                     </span>
                   </div>
-                  <h4 className="text-xs sm:text-sm font-bold tracking-tight mt-0.5" style={{ color: 'var(--text-primary)' }}>
-                    Personally Advised by an Ex-Government Tender Creator & Committee Approver
-                  </h4>
+                  <h3 className="text-base sm:text-lg lg:text-xl font-bold tracking-tight leading-snug" style={{ color: 'var(--text-primary)' }}>
+                    Guided by an Experienced Ex-Government Tender Expert & Committee Approver
+                  </h3>
                 </div>
               </div>
 
-              <p className="text-xs sm:text-[13px] mt-2.5 leading-relaxed relative z-10" style={{ color: 'var(--text-secondary)' }}>
-                Unlike general agencies who guess rules from the outside, our chief consultant spent <strong style={{ color: 'var(--text-primary)' }}>18+ years inside government enterprises creating, evaluating, and approving tenders</strong>. Because he knows the scrutiny process, compliance scoring, and unwritten winning rules inside out, having Prayash review and consult your bid gives you <strong style={{ color: 'var(--accent)' }}>far higher chances of winning than any other competitor.</strong>
+              {/* Main Copy */}
+              <p className="text-xs sm:text-[13px] leading-relaxed mb-5" style={{ color: 'var(--text-secondary)' }}>
+                Our team is personally guided by a senior consultant who has 18+ years of experience in government enterprises, working directly with tender committees, procurement processes and evaluation frameworks. With first-hand knowledge of how tenders are scrutinized and approved, we help your business navigate the entire process with confidence — ensuring compliance, higher win probabilities and better outcomes.
               </p>
 
-              <div className="mt-3 pt-2.5 border-t flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] font-medium relative z-10" style={{ borderColor: 'var(--border)' }}>
-                <span className="flex items-center gap-1.5" style={{ color: 'var(--text-primary)' }}>
-                  <CheckCircle2 size={13} className="text-[#10B981]" />
-                  18 Yrs Exclusively in Govt Tenders
-                </span>
-                <span className="flex items-center gap-1.5" style={{ color: 'var(--text-primary)' }}>
-                  <CheckCircle2 size={13} className="text-[#10B981]" />
-                  Ex-Tender Drafter & Approver Insider Knowledge
-                </span>
-                <span className="flex items-center gap-1.5" style={{ color: 'var(--text-primary)' }}>
-                  <CheckCircle2 size={13} className="text-[#10B981]" />
-                  Significantly Higher Win Probability
-                </span>
-              </div>
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3.5 mb-8">
-              <Link
-                to="/contact"
-                id="cta-hero-consultation"
-                onClick={() => trackEvent(EVENTS.CTA_CONSULTATION_CLICK, { location: 'hero' })}
-                className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl font-bold text-sm text-white shadow-lg transition-all duration-200"
-                style={{ background: 'var(--accent)', boxShadow: '0 8px 24px var(--accent-glow)' }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--accent-hover)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--accent)')}
-              >
-                {hero.primaryCtaText}
-                <ArrowRight size={16} />
-              </Link>
-              <Link
-                to="/send-tender"
-                id="cta-hero-send-tender"
-                onClick={() => trackEvent(EVENTS.CTA_SEND_TENDER_CLICK, { location: 'hero' })}
-                className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl border font-bold text-sm transition-all duration-200 shadow-xs"
+              {/* 4 Feature Value Badges Grid */}
+              <div
+                className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 p-3 rounded-xl border mb-5"
                 style={{
-                  backgroundColor: 'var(--bg-card)',
+                  backgroundColor: 'var(--bg-subtle)',
                   borderColor: 'var(--border)',
-                  color: 'var(--text-primary)',
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--accent-border)')}
-                onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border)')}
               >
-                <UploadCloud size={16} style={{ color: 'var(--accent)' }} />
-                {hero.secondaryCtaText}
-              </Link>
-            </div>
-
-            {/* Social proof & Indian contractor avatars */}
-            <div className="flex flex-wrap items-center gap-4 pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
-              <div className="flex -space-x-2.5">
-                {['/avatar-1.png', '/avatar-2.png', '/avatar-3.png'].map((src, i) => (
+                {/* 1. 18+ Years in Govt Tenders */}
+                <div className="flex items-center gap-2.5 min-w-0">
                   <div
-                    key={i}
-                    className="w-10 h-10 rounded-full border-2 overflow-hidden flex-shrink-0 shadow-sm"
-                    style={{ borderColor: 'var(--bg-base)', zIndex: 3 - i }}
+                    className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-white shadow-xs"
+                    style={{ backgroundColor: '#0D9488' }}
                   >
-                    <img
-                      src={src}
-                      alt={`Indian contractor client ${i + 1}`}
-                      className="w-full h-full object-cover object-top"
-                      loading="lazy"
-                    />
+                    <Landmark size={15} />
                   </div>
-                ))}
-                <div
-                  className="w-10 h-10 rounded-full border-2 flex items-center justify-center flex-shrink-0 text-xs font-black shadow-sm text-white"
-                  style={{ borderColor: 'var(--bg-base)', background: 'var(--accent)' }}
-                >
-                  +120
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold leading-tight" style={{ color: 'var(--text-primary)' }}>
+                      18+ Years
+                    </p>
+                    <p className="text-[10px] leading-tight" style={{ color: 'var(--text-muted)' }}>
+                      in Govt Tenders
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <div className="flex items-center gap-1 mb-0.5">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <span key={s} className="text-amber-400 text-sm">★</span>
-                  ))}
-                  <span className="text-xs font-bold ml-1" style={{ color: 'var(--text-primary)' }}>
-                    4.9 / 5
-                  </span>
+
+                {/* 2. Ex-Government Experience */}
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-white shadow-xs"
+                    style={{ backgroundColor: '#0D9488' }}
+                  >
+                    <ShieldCheck size={15} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold leading-tight" style={{ color: 'var(--text-primary)' }}>
+                      Ex-Government Experience
+                    </p>
+                    <p className="text-[10px] leading-tight truncate" style={{ color: 'var(--text-muted)' }}>
+                      Direct Committee & Procurement Insight
+                    </p>
+                  </div>
                 </div>
-                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-                  Trusted by contractors & MSME suppliers across India
-                </p>
+
+                {/* 3. Proven Tender Strategy */}
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-white shadow-xs"
+                    style={{ backgroundColor: '#0D9488' }}
+                  >
+                    <FileSearch size={15} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold leading-tight" style={{ color: 'var(--text-primary)' }}>
+                      Proven Tender Strategy
+                    </p>
+                    <p className="text-[10px] leading-tight truncate" style={{ color: 'var(--text-muted)' }}>
+                      Compliance, Clarity & Stronger Bids
+                    </p>
+                  </div>
+                </div>
+
+                {/* 4. Higher Chances of Winning */}
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-white shadow-xs"
+                    style={{ backgroundColor: '#0D9488' }}
+                  >
+                    <TrendingUp size={15} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold leading-tight" style={{ color: 'var(--text-primary)' }}>
+                      Higher Chances of Winning
+                    </p>
+                    <p className="text-[10px] leading-tight truncate" style={{ color: 'var(--text-muted)' }}>
+                      With Expert Guidance
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              {/* Direct WhatsApp link */}
-              <a
-                href={`https://wa.me/${siteInfo.whatsapp}?text=Hello%20Prayash%20Consultancy%2C%20I%20need%20assistance%20with%20a%20government%20tender.`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackEvent(EVENTS.WHATSAPP_CLICK, { location: 'hero_proof' })}
-                className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
-                style={{ color: '#25D366' }}
-              >
-                <MessageCircle size={14} />
-                Quick WhatsApp Inquiry
-              </a>
+              {/* CTAs matching the image layout */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                <motion.div
+                  whileHover={{ scale: 1.015 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                >
+                  <Link
+                    to="/contact"
+                    id="cta-hero-consultation"
+                    onClick={() => trackEvent(EVENTS.CTA_CONSULTATION_CLICK, { location: 'hero_chief_card' })}
+                    className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-bold text-xs sm:text-sm text-white shadow-md w-full transition-all"
+                    style={{
+                      background: 'linear-gradient(135deg, #0D9488 0%, #0F766E 100%)',
+                      boxShadow: '0 4px 14px rgba(13, 148, 136, 0.25)',
+                    }}
+                  >
+                    <span>Get Free Tender Consultation</span>
+                    <ArrowRight size={15} />
+                  </Link>
+                </motion.div>
+
+                <motion.div
+                  whileHover={{ scale: 1.015 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                >
+                  <Link
+                    to="/send-tender"
+                    id="cta-hero-send-tender"
+                    onClick={() => trackEvent(EVENTS.CTA_SEND_TENDER_CLICK, { location: 'hero_chief_card' })}
+                    className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl border font-bold text-xs sm:text-sm shadow-xs w-full transition-all"
+                    style={{
+                      backgroundColor: 'var(--bg-card)',
+                      borderColor: 'rgba(13, 148, 136, 0.45)',
+                      color: 'var(--text-primary)',
+                    }}
+                  >
+                    <MessageCircle size={15} style={{ color: '#0D9488' }} />
+                    <span>Send Tender for Feasibility Review</span>
+                  </Link>
+                </motion.div>
+              </div>
+
+              {/* Bottom social proof & Quick WhatsApp inquiry matching image */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t" style={{ borderColor: 'var(--border)' }}>
+                <div className="flex items-center gap-3">
+                  <div className="flex -space-x-2">
+                    {['/avatar-1.png', '/avatar-2.png', '/avatar-3.png'].map((src, i) => (
+                      <div
+                        key={i}
+                        className="w-7 h-7 rounded-full border-2 overflow-hidden flex-shrink-0 shadow-xs"
+                        style={{ borderColor: 'var(--bg-card)', zIndex: 3 - i }}
+                      >
+                        <img
+                          src={src}
+                          alt={`Indian contractor ${i + 1}`}
+                          className="w-full h-full object-cover object-top"
+                          loading="lazy"
+                        />
+                      </div>
+                    ))}
+                    <div
+                      className="w-7 h-7 rounded-full border-2 flex items-center justify-center flex-shrink-0 text-[10px] font-black shadow-xs text-white"
+                      style={{ borderColor: 'var(--bg-card)', background: '#0D9488' }}
+                    >
+                      120+
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center gap-1">
+                      <div className="flex text-amber-400 text-xs">
+                        {'★★★★★'}
+                      </div>
+                      <span className="text-xs font-bold" style={{ color: 'var(--text-primary)' }}>
+                        4.9 / 5
+                      </span>
+                    </div>
+                    <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                      Trusted by Contractors & MSME suppliers across India
+                    </p>
+                  </div>
+                </div>
+
+                <a
+                  href={`https://wa.me/${siteInfo.whatsapp}?text=Hello%20Prayash%20Consultancy%2C%20I%20need%20assistance%20with%20a%20government%20tender.`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent(EVENTS.WHATSAPP_CLICK, { location: 'hero_chief_card' })}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
+                  style={{ color: '#0D9488' }}
+                >
+                  <MessageCircle size={14} className="text-[#25D366]" />
+                  <span>Quick WhatsApp Inquiry</span>
+                </a>
+              </div>
             </div>
           </div>
 
@@ -319,19 +398,29 @@ export default function Hero() {
                   </div>
                 </div>
 
-                {/* Tender Tabs */}
-                <div className="flex border-b overflow-x-auto" style={{ borderColor: 'var(--border)' }}>
+                {/* Tender Tabs with Apple fluid spring sliding pill */}
+                <div className="flex border-b overflow-x-auto p-1.5 gap-1" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg-card-alt)' }}>
                   {tenderTabs.map((tab, i) => (
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(i)}
-                      className="px-3.5 py-2.5 text-xs font-semibold whitespace-nowrap transition-all border-b-2"
+                      className="relative px-3.5 py-2 text-xs font-semibold whitespace-nowrap rounded-lg transition-colors z-10"
                       style={{
-                        borderColor: activeTab === i ? 'var(--accent)' : 'transparent',
-                        color: activeTab === i ? 'var(--accent)' : 'var(--text-muted)',
-                        backgroundColor: activeTab === i ? 'var(--accent-dim)' : 'transparent',
+                        color: activeTab === i ? 'var(--text-primary)' : 'var(--text-muted)',
                       }}
                     >
+                      {activeTab === i && (
+                        <motion.div
+                          layoutId="activeHeroTab"
+                          transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                          className="absolute inset-0 rounded-lg shadow-xs"
+                          style={{
+                            backgroundColor: 'var(--bg-surface)',
+                            border: '1px solid var(--border-md)',
+                            zIndex: -1,
+                          }}
+                        />
+                      )}
                       {tab.label}
                     </button>
                   ))}

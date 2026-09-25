@@ -73,7 +73,11 @@ export default function HowItWorks() {
         {/* Steps — horizontal on large, vertical on mobile */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-12">
           {steps.map((step, i) => (
-            <SectionReveal key={step.number} delay={i * 100}>
+            <SectionReveal
+              key={step.number}
+              delay={i * 80}
+              direction={i === 0 ? 'left' : i === steps.length - 1 ? 'right' : 'morph'}
+            >
               <div
                 className="relative rounded-2xl p-5 h-full border transition-all duration-250 hover:-translate-y-1"
                 style={{

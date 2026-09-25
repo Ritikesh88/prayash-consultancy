@@ -38,7 +38,7 @@ export default function WhyUs() {
         </SectionReveal>
 
         {/* ── Spotlight: 18-Year Ex-Govt Tender Drafter & Evaluator Inside Advantage ── */}
-        <SectionReveal>
+        <SectionReveal direction="morph">
           <div
             className="mb-10 p-6 sm:p-8 rounded-3xl border relative overflow-hidden shadow-lg"
             style={{
@@ -135,8 +135,9 @@ export default function WhyUs() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {differentiators.map((item, i) => {
             const Icon = item.icon
+            const direction = i % 3 === 0 ? 'left' : i % 3 === 1 ? 'morph' : 'right'
             return (
-              <SectionReveal key={item.title} delay={i * 60}>
+              <SectionReveal key={item.title} delay={i * 60} direction={direction}>
                 <div
                   className="rounded-2xl p-7 h-full border transition-all duration-200 hover:-translate-y-1 group cursor-default shadow-xs hover:shadow-lg"
                   style={{

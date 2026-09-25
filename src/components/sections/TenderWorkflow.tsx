@@ -82,10 +82,11 @@ export default function TenderWorkflow() {
           </div>
 
           {/* 6 Stage Stations */}
-          <div className="grid grid-cols-6 gap-4 relative z-10">
-            {stages.map((stage, idx) => {
-              const Icon = stage.icon
-              const isCurrent = activeStage === idx
+          <SectionReveal direction="morph">
+            <div className="grid grid-cols-6 gap-4 relative z-10">
+              {stages.map((stage, idx) => {
+                const Icon = stage.icon
+                const isCurrent = activeStage === idx
 
               return (
                 <div
@@ -193,6 +194,7 @@ export default function TenderWorkflow() {
               )
             })}
           </div>
+          </SectionReveal>
 
           {/* Active Stage Detailed Spotlight Bar */}
           <div
